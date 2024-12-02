@@ -26,6 +26,23 @@ class Day02
         printf('There were %d safe reports in %d total.' . PHP_EOL, $safeCount, count($this->input));
     }
 
+    public function part2(): void
+    {
+        $safeCount = 0;
+        foreach ($this->input as $report) {
+            if ($this->isReportSafe(explode(' ', $report))) {
+                echo '.';
+                $safeCount++;
+            } elseif ($this->isReportSafeWithDampener(explode(' ', $report))) {
+                echo '!';
+                $safeCount++;
+            }
+        }
+        echo PHP_EOL;
+
+        printf('There were %d safe (with dampener) reports in %d total.' . PHP_EOL, $safeCount, count($this->input));
+    }
+
     private function isReportSafe(array $report): bool
     {
         $changes = [];
@@ -52,6 +69,26 @@ class Day02
         return true;
     }
 
+    private function isReportSafeWithDampener(array $report): bool
+    {
+        $extraReports = [];
+        $count = count($report); //NB: sample has all rows of 5 items, actual input varies from 5 to 8 entries!
+
+        //add all reports with one number removed
+        for ($i = 0; $i < $count; $i++) {
+            $extraReport = $report;
+            unset($extraReport[$i]);
+            $extraReports[] = array_values($extraReport);
+        }
+        foreach ($extraReports as $extraReport) {
+            if ($this->isReportSafe($extraReport)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function allPositiveOrAllNegative(array $changes): bool
     {
         $neg = array_filter($changes, static fn(int $num) => $num < 0);
@@ -61,5 +98,5 @@ class Day02
     }
 }
 
-(new Day02())->part1();
-//(new Day02())->part2();
+//(new Day02())->part1();
+(new Day02())->part2();
