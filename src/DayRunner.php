@@ -7,18 +7,62 @@ namespace AdventOfCode;
 class DayRunner
 {
     private string $home;
+    private array $availableDays = [];
     private int $selectedYear;
-    private int $selectedDay;
+    private string $selectedDay; //string because leading zero, e.g. 08
     private int $selectedPart;
+    private string $selectedEnv;
+
+    private const YEAR_PREFIX = 'Year';
+    private const DAY_PREFIX = 'Day';
+
+    private const ENV_TEST = 'test';
+    private const ENV_LIVE = 'live';
 
     public function __construct(array $argv)
     {
         $this->home = getcwd();
-        if (count($argv) === 1) {
-//            $this->getMostRecentYearDayPart();
-            $this->getMenuInputPart();
-        } else {
+        if (count($argv) > 1) {
             $this->parseArguments($argv);
+        } else {
+            $this->scanAvailableDays();
+            $this->selectedYear = $this->getMostRecentYear();
+            $this->selectedDay = $this->getMostRecentDay($this->selectedYear);
+            $this->selectedPart = 2;
+            $this->selectedEnv = self::ENV_TEST;
+
+            return $this->showMenu();
+        }
+    }
+
+    private function showMenu(): void
+    {
+        /**
+         * when no arguments, show menu:
+         * - [ENTER] run most recent day+part on test
+         * - [1] Change above to live
+         * - [2] Change part to [other part]
+         * - [3] Change day (submenu)
+         * - [4] Change year (submenu)
+         */
+        echo 'Choose a puzzle solution to run:' . PHP_EOL;
+        $this->printSelectedYearDayPart();
+        $this->printMenu();
+
+        $input = $this->getInput('>');
+        $this->processInput($input);
+    }
+
+    private function processInput(string $input): void
+    {
+        switch ($input) {
+            case '': $this->runSelected(); break;
+            case '1': $this->flipEnv(); $this->showMenu(); break;
+            case '2': $this->flipPart(); $this->showMenu(); break;
+            case '3': $this->showDayMenu(); break;
+            case '4': $this->showYearMenu(); break;
+            case 'q':
+            case 'x': return;
         }
     }
 
@@ -39,6 +83,15 @@ class DayRunner
         $class = new $className($dataSet);
         $class->{$func}();
     }
+
+    private function scanAvailableDays(): void
+    {
+        $years = $this->getYears();
+        foreach ($years as $yearStr) {
+            $year = (int) str_replace(self::YEAR_PREFIX, '', $yearStr);
+            $this->availableDays[$year] = array_map(fn (string $day) => str_replace(self::DAY_PREFIX, '', $day), $this->getDays($year));
+        }
+    }
     
     private function getYears(): array
     {
@@ -58,86 +111,103 @@ class DayRunner
         return $days;
     }
 
+    private function printSelectedYearDayPart()
+    {
+        printf('[ ] Year%d / Day%s / Part%d / %s' . PHP_EOL,
+            $this->selectedYear,
+            $this->selectedDay,
+            $this->selectedPart,
+            strtoupper($this->selectedEnv)
+        );
+    }
+
+    private function printMenu(): void
+    {
+        printf('[1] Change env to %s' . PHP_EOL, strtoupper($this->selectedEnv === self::ENV_TEST ? self::ENV_LIVE : self::ENV_TEST));
+        printf('[2] Change part to %d' . PHP_EOL, $this->selectedPart === 1 ? 2 : 1);
+        print('[3] Change day ->' . PHP_EOL);
+        print('[4] Change year ->' . PHP_EOL);
+    }
+    
+    private function flipEnv(): void
+    {
+        $this->selectedEnv = $this->selectedEnv === self::ENV_TEST ? self::ENV_LIVE : self::ENV_TEST;
+    }
+
+    private function flipPart(): void
+    {
+        $this->selectedPart = $this->selectedPart === 1 ? 2 : 1;
+    }
+
     private function getMostRecentDay(int $year): string
     {
-        return $this->getDays($year)[0];
+        return $this->availableDays[$year][0];
     }
 
-    private function getMostRecentYear(): string
+    private function getMostRecentYear(): int
     {
-        return $this->getYears()[0];
+        return array_keys($this->availableDays)[0];
     }
 
-    private function getMenuInputPart(): void
+    private function showDayMenu(): void
     {
-        print('Choose part, or change day?' . PHP_EOL);
-        
-        $year = $this->getMostRecentYear();
-        $day = $this->getMostRecentDay((int) str_replace('Year', '', $year));
-        printf(
-            'Most recent: %s - %s' . PHP_EOL,
-            $year,
-            $day
+        printf(PHP_EOL . 'Choose a day from year %d:' . PHP_EOL, $this->selectedYear);
+        foreach ($this->availableDays[$this->selectedYear] as $day) {
+            printf('[%1$d] Day%1$02d' . PHP_EOL, $day);
+        }
+        $input = $this->getInput('>');
+        if (is_numeric($input)) {
+            $this->selectedDay = str_pad($input, 2, '0', STR_PAD_LEFT);
+        }
+
+        $this->showMenu();
+    }
+
+    private function showYearMenu(): void
+    {
+        print(PHP_EOL . 'Choose a year:' . PHP_EOL);
+        foreach (array_keys($this->availableDays) as $year) {
+            printf('[%1$d] Year%1$d' . PHP_EOL, $year);
+        }
+        $input = $this->getInput('>');
+        if (is_numeric($input)) {
+            $this->selectedYear = (int) $year;
+            $this->selectedDay = $this->availableDays[$year][0];
+        }
+
+        $this->showMenu();
+    }
+    
+    private function runSelected(): void
+    {
+        $this->runDay(
+            $this->selectedYear,
+            $this->selectedDay,
+            $this->selectedPart,
+            $this->selectedEnv
         );
-        echo '1) Part1' . PHP_EOL . '2) Part2' . PHP_EOL . PHP_EOL . 'd) Change day' . PHP_EOL . PHP_EOL;
-
-        $input = $this->getInput('> ');
-        $yearNum = (int) str_replace('Year', '', $year);
-        $dayNum = (int) str_replace('Day', '', $day);
-
-        switch ($input) {
-            case '1':
-            case '2': $this->runDay($yearNum, $dayNum, (int) $input, 'test'); break;
-            case 'd': $this->getMenuInputDay();
-            default: throw new InvalidArgumentException(sprintf('Invalid menu input "%s"', $input));
-        }
     }
 
-    private function getMenuInputDay(): void
+    private function runDay(int $year, string $day, int $part, string $dataSet): void
     {
-        foreach ($days[max($years)] as $day) {
-            printf(
-                '%d) %s' . PHP_EOL,
-                (int) str_replace('Day', '', $day),
-                $day
-            );
-        }
+        $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
 
-        print(PHP_EOL);
-        if (1 || count($years) > 1) {
-            foreach ($years as $year) {
-                printf(
-                    '%d) %s' . PHP_EOL,
-                    (int) str_replace('Year', '', $year),
-                    $year
-                );
-            }
-        }
-
-        $userInput = $this->getInput('> ');
-
-        switch ($userInput) {
-            case '': $this->runDay(reset($years), reset($days)); break;
-            case $userInput <= 25: $this->runDay($this->runDay(reset($years), (int) $userInput));
-
-        }
-    }
-
-    private function runDay(int $year, int $day, int $part, string $dataSet): void
-    {
         chdir($this->home);
+        printf('Loading file %s..' . PHP_EOL, $classFile);
         include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
-        include_once sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
+        include_once $classFile;
 
-        $dayClass = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
-
-        $obj = new $dayClass($dataSet);
+        $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
+        printf('Loading class %s..' . PHP_EOL, $className);
+        $obj = new $className($dataSet);
+        
+        printf('Running part%d with %s data!' . PHP_EOL, $part, $dataSet);
+        print(str_repeat('=', 30) . PHP_EOL);
         $partFunc = sprintf('part%d', $part);
-        if (!method_exists($obj, $partFunc)) {
-            throw new RuntimeException('Class %s has no method part%d', $dayClass, $part);
-        }
-
+        $t = microtime(true);
         $obj->{$partFunc}();
+        print(str_repeat('=', 30) . PHP_EOL);
+        printf('Runtime: %1$.3f ms' . PHP_EOL, 1000 * (microtime(true) - $t));
     }
 
     private function getInput(string $prompt): string
