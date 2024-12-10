@@ -73,15 +73,7 @@ class DayRunner
         $part = $argv[3] ?? 1;
         $dataSet = $argv[4] ?? 'test';
 
-        $classFile = sprintf('./src/Year%1$d/Day%2$02d.php', $year, $day);
-        $className = sprintf('AdventOfCode\Year%1$d\Day%2$02d', $year, $day);
-        $func = sprintf('part%d', $part);
-
-        include_once './src/AbstractDay.php';
-        include_once $classFile;
-
-        $class = new $className($dataSet);
-        $class->{$func}();
+        $this->runDay((int) $year, $day, (int) $part, $dataSet);
     }
 
     private function scanAvailableDays(): void

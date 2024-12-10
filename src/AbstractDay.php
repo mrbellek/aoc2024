@@ -36,6 +36,13 @@ abstract class AbstractDay
         }
     }
 
-    abstract function part1(): void;
-    abstract function part2(): void;
+    public function part1(): void
+    {
+        die('Part1 is unfinished for this day!');
+    }
+
+    public function part2(): void
+    {
+        die('Part2 is unfinished for this day!');
+    }
 }
