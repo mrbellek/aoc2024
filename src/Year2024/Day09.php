@@ -8,12 +8,28 @@ use AdventOfCode\AbstractDay;
 
 class Day09 extends AbstractDay
 {
+    private bool $isLive = false;
+
+    public function __construct(string $dataSet)
+    {
+        parent::__construct($dataSet);
+        $this->isLive = $dataSet === 'live';
+    }
+
     public function part1(): void
     {
+        print('Converting input to block string..' . PHP_EOL);
         $blockString = $this->convertMapToBlockString($this->input[0]);
 
+        print('Defragmenting..' . PHP_EOL);
         for ($i = 0; $i < strlen($blockString); $i++) {
-            print($blockString) . PHP_EOL;
+            if ($this->isLive) {
+                if ($i % 1000 === 0) {
+                    echo '.';
+                }
+            } else {
+                print($blockString) . PHP_EOL;
+            }
             $rightCharPos = $this->findRightMostChar($blockString);
             $rightChar = substr($blockString, $rightCharPos, 1);
             $firstDot = strpos($blockString, '.');
@@ -25,14 +41,18 @@ class Day09 extends AbstractDay
                 break;
             }
         }
-        print($blockString);
 
-        $checksum = 0;
+        if ($this->isLive === false) {
+            print($blockString);
+        }
+        print(PHP_EOL . 'Done!' . PHP_EOL);
+
+        $checksum = 0.0;
         for ($i = 0; $i < strlen($blockString); $i++) {
-            $checksum += intval($i) * intval($blockString[$i]);
+            $checksum += (float) ((float) $i * (float) $blockString[$i]);
         }
 
-        printf(PHP_EOL . 'The checksum is %d' . PHP_EOL, $checksum);
+        printf('The checksum is %s' . PHP_EOL, $checksum);
     }
 
     public function part2(): void
@@ -49,9 +69,9 @@ class Day09 extends AbstractDay
       
         for ($i = 0; $i < max(count($files), count($spaces)); $i++) {
             $blockString .= str_repeat((string) $i, (int) $files[$i] ?? 0);
-            $blockString .= str_repeat('.', (int) $spaces[$i] ?? 0);
-            
+            $blockString .= str_repeat('.', (int) ($spaces[$i] ?? 0));
         }
+        printf('Converted input of %d bytes into blockstring of length %d' . PHP_EOL, strlen($map), strlen($blockString));
         
         return $blockString;
     }
