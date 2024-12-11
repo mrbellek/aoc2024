@@ -7,6 +7,7 @@ namespace AdventOfCode;
 abstract class AbstractDay
 {
     protected array $input;
+    protected bool $isLive;
 
     public function __construct(string $dataSet)
     {
@@ -28,9 +29,11 @@ abstract class AbstractDay
 
         switch ($dataSet) {
             case 'test':
+                $this->isLive = false;
                 $this->input = file(sprintf('./data/%1$d/sample%2$02d.txt', $year, $day), FILE_IGNORE_NEW_LINES);
                 break;
             case 'live':
+                $this->isLive = true;
                 $this->input = file(sprintf('./data/%1$d/input%2$02d.txt', $year, $day), FILE_IGNORE_NEW_LINES);
                 break;
         }
@@ -44,5 +47,17 @@ abstract class AbstractDay
     public function part2(): void
     {
         die('Part2 is unfinished for this day!');
+    }
+
+    protected function log(string $s): void
+    {
+        print($s . PHP_EOL);
+    }
+
+    protected function debug(string $s): void
+    {
+        if ($this->isLive === false) {
+            print($s . PHP_EOL);
+        }
     }
 }

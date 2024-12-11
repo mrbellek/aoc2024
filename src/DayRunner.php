@@ -196,10 +196,17 @@ class DayRunner
         printf('Running part%d with %s data!' . PHP_EOL, $part, $dataSet);
         print(str_repeat('=', 30) . PHP_EOL);
         $partFunc = sprintf('part%d', $part);
+
         $t = microtime(true);
         $obj->{$partFunc}();
+        $runtime = microtime(true) - $t;
+
         print(str_repeat('=', 30) . PHP_EOL);
-        printf('Runtime: %1$.3f ms' . PHP_EOL, 1000 * (microtime(true) - $t));
+        if ($runtime < 10) {
+            printf('Runtime: %1$.3f us' . PHP_EOL, 1_000_000 * $runtime);
+        } else {
+            printf('Runtime: %1$.3f ms' . PHP_EOL, 1_000 * $runtime);
+        }
     }
 
     private function getInput(string $prompt): string
