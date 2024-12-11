@@ -46,12 +46,12 @@ class Day08 extends AbstractDay
 
         $antinodes = $this->getUniqueNodes($antinodes);
         $this->printMatrixWithAntinodes($antinodes);
-        printf('There are %d unique locations on the map with antinodes.', count($antinodes));
+        $this->log(sprintf('There are %d unique locations on the map with antinodes.', count($antinodes)));
     }
 
     public function part2(): void
     {
-
+        die('unfinished!');
     }
 
     private function findNodes(): array
@@ -110,7 +110,7 @@ class Day08 extends AbstractDay
 
     private function printMatrixWithAntinodes(array $antinodes): void
     {
-        print(PHP_EOL . 'With antinodes:' . PHP_EOL . PHP_EOL);
+        $this->debug(PHP_EOL . 'With antinodes:' . PHP_EOL . PHP_EOL);
         $matrix = $this->matrix;
         foreach ($antinodes as $antinode) {
             if (!$this->isPointOccupied($antinode)) {
@@ -118,7 +118,7 @@ class Day08 extends AbstractDay
             }
         }
         foreach ($matrix as $y => $line) {
-            print(implode('', $line) . PHP_EOL);
+            $this->debug(implode('', $line));
         }
     }
 

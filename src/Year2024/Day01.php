@@ -11,11 +11,6 @@ class Day01 extends AbstractDay
     private const SEP = '   ';
     private array $rightCounts = [];
 
-    public function __construct(string $dataSet)
-    {
-        parent::__construct($dataSet);
-    }
-
     public function part1(): void
     {
         [$left, $right] = $this->getLists();
@@ -27,7 +22,7 @@ class Day01 extends AbstractDay
             $totalDistance += abs($left[$i] - $right[$i]);
         }
 
-        printf('Total distance: %d' . PHP_EOL, $totalDistance);
+        $this->log(sprintf('Total distance: %d', $totalDistance));
     }
 
     public function part2(): void
@@ -40,7 +35,7 @@ class Day01 extends AbstractDay
             $similarityScore += $leftNum * $count;
         }
 
-        printf('Similarity score: %s' . PHP_EOL, $similarityScore);
+        $this->log(sprintf('Similarity score: %s', $similarityScore));
     }
 
     private function getLists(): array

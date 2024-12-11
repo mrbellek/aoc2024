@@ -8,11 +8,6 @@ use AdventOfCode\AbstractDay;
 
 class Day02 extends AbstractDay
 {
-    public function __construct(string $dataSet)
-    {
-        parent::__construct($dataSet);
-    }
-
     public function part1(): void
     {
         $safeCount = 0;
@@ -22,7 +17,7 @@ class Day02 extends AbstractDay
             }
         }
 
-        printf('There were %d safe reports in %d total.' . PHP_EOL, $safeCount, count($this->input));
+        $this->log(sprintf('There were %d safe reports in %d total.', $safeCount, count($this->input)));
     }
 
     public function part2(): void
@@ -39,7 +34,11 @@ class Day02 extends AbstractDay
         }
         echo PHP_EOL;
 
-        printf('There were %d safe (with dampener) reports in %d total.' . PHP_EOL, $safeCount, count($this->input));
+        $this->log(sprintf(
+            'There were %d safe (with dampener) reports in %d total.',
+            $safeCount,
+            count($this->input)
+        ));
     }
 
     private function isReportSafe(array $report): bool

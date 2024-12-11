@@ -27,13 +27,13 @@ class Day04 extends AbstractDay
         $xmasCount['dia1'] = $this->checkDiagonalLTRXmas();
         $xmasCount['dia2'] = $this->checkDiagonalRTLXmas();
 
-        printf('The matrix contains XMAS: %d horizontally, %d vertically, %d diagonally LRT, %d diagonally RTL' . PHP_EOL,
+        $this->log(sprintf('The matrix contains XMAS: %d horizontally, %d vertically, %d diagonally LRT, %d diagonally RTL',
             $xmasCount['hori'],
             $xmasCount['vert'],
             $xmasCount['dia1'],
             $xmasCount['dia2'],
-        );
-        printf('This gives a total of %d XMAS' . PHP_EOL, array_sum($xmasCount));
+        ));
+        $this->log(sprintf('This gives a total of %d XMAS', array_sum($xmasCount)));
     }
 
     public function part2(): void
@@ -65,8 +65,8 @@ class Day04 extends AbstractDay
          * M S 
          */
         foreach ($this->matrix as $line) {
-
         }
+        die('unfinished');
     }
 
     private function convertInputToMatrix(): array

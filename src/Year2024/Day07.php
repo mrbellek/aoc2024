@@ -8,8 +8,6 @@ use AdventOfCode\AbstractDay;
 
 class Day07 extends AbstractDay
 {
-    private const ALLOWED_OPERATORS = ['*', '+'];
-
     public function part1(): void
     {
         $totalPossibleSums = 0;
@@ -20,20 +18,20 @@ class Day07 extends AbstractDay
             }
         }
 
-        printf('The total of all sums that can be made is %d' . PHP_EOL, $totalPossibleSums);
+        $this->log(sprintf('The total of all sums that can be made is %d', $totalPossibleSums));
     }
 
     public function part2(): void
     {
         $totalPossibleSums = 0;
-        foreach ($this->input as $i => $line) {
+        foreach ($this->input as $line) {
             [$expectedSum, $numbers] = explode(': ', $line);
             if ($this->canNumbersMakeSum(explode(' ', $numbers), (float) $expectedSum, 3)) {
                 $totalPossibleSums += $expectedSum;
             }
         }
 
-        printf('The total of all sums that can be made with 3 operators is %d' . PHP_EOL, $totalPossibleSums);
+        $this->log(sprintf('The total of all sums that can be made with 3 operators is %d', $totalPossibleSums));
     }
 
     private function canNumbersMakeSum(array $numbers, float $expectedTotal, int $base): bool
@@ -63,7 +61,7 @@ class Day07 extends AbstractDay
             }
 
             if ($actualTotal == $expectedTotal) {
-                echo $formula . ' = ' . $actualTotal . PHP_EOL;
+                $this->debug($formula . ' = ' . $actualTotal);
                 return true;
             }
         }

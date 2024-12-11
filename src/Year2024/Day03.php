@@ -22,7 +22,7 @@ class Day03 extends AbstractDay
             }
         }
 
-        printf('The total is %d' . PHP_EOL, $sum);
+        $this->log(sprintf('The total is %d', $sum));
     }
 
     public function part2(): void
@@ -47,7 +47,7 @@ class Day03 extends AbstractDay
             }
         }
 
-        printf('The total with operators is: %d' . PHP_EOL, $sum);
+        $this->log(sprintf('The total with operators is: %d', $sum));
     }
 
     private function getSum(string $match): int

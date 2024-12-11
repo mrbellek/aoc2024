@@ -8,27 +8,19 @@ use AdventOfCode\AbstractDay;
 
 class Day09 extends AbstractDay
 {
-    private bool $isLive = false;
-
-    public function __construct(string $dataSet)
-    {
-        parent::__construct($dataSet);
-        $this->isLive = $dataSet === 'live';
-    }
-
     public function part1(): void
     {
-        print('Converting input to block string..' . PHP_EOL);
+        $this->log('Converting input to block string..');
         $blockString = $this->convertMapToBlockString($this->input[0]);
 
-        print('Defragmenting..' . PHP_EOL);
+        $this->log('Defragmenting..');
         for ($i = 0; $i < strlen($blockString); $i++) {
             if ($this->isLive) {
                 if ($i % 1000 === 0) {
                     echo '.';
                 }
             } else {
-                print($blockString) . PHP_EOL;
+                $this->debug($blockString);
             }
             $rightCharPos = $this->findRightMostChar($blockString);
             $rightChar = substr($blockString, $rightCharPos, 1);
@@ -42,22 +34,20 @@ class Day09 extends AbstractDay
             }
         }
 
-        if ($this->isLive === false) {
-            print($blockString);
-        }
-        print(PHP_EOL . 'Done!' . PHP_EOL);
+        $this->debug($blockString);
+        $this->log(PHP_EOL . 'Done!');
 
         $checksum = 0.0;
         for ($i = 0; $i < strlen($blockString); $i++) {
             $checksum += (float) ((float) $i * (float) $blockString[$i]);
         }
 
-        printf('The checksum is %s' . PHP_EOL, $checksum);
+        $this->log(sprintf('The checksum is %s', $checksum));
     }
 
     public function part2(): void
     {
-
+        die('unfinished!');
     }
 
     private function convertMapToBlockString(string $map): string
@@ -71,7 +61,7 @@ class Day09 extends AbstractDay
             $blockString .= str_repeat((string) $i, (int) $files[$i] ?? 0);
             $blockString .= str_repeat('.', (int) ($spaces[$i] ?? 0));
         }
-        printf('Converted input of %d bytes into blockstring of length %d' . PHP_EOL, strlen($map), strlen($blockString));
+        $this->log(sprintf('Converted input of %d bytes into blockstring of length %d', strlen($map), strlen($blockString)));
         
         return $blockString;
     }

@@ -20,14 +20,14 @@ class Day05 extends AbstractDay
         $pageNumerSum = 0;
         foreach ($validLines as $line) {
             if (count($line) % 2 === 1) {
-                printf('Valid line: %s' . PHP_EOL, implode(',', $line));
+                $this->debug(sprintf('Valid line: %s', implode(',', $line)));
                 $pageNumerSum += $line[floor(count($line) / 2)];
             } else {
                 //does not happen
             }
         }
 
-        printf('The sum of the middle page numbers of valid lines is: %d' . PHP_EOL, $pageNumerSum);
+        $this->log(sprintf('The sum of the middle page numbers of valid lines is: %d', $pageNumerSum));
     }
 
     private function extractRulesAndLines(): void
@@ -57,7 +57,7 @@ class Day05 extends AbstractDay
 
             ///check all following numbers against rules
             foreach (array_slice($line, $i+1) as $nextNumber) {
-                printf('checking if %d shouldbe followed by %d' . PHP_EOL, $number, $nextNumber);
+                $this->debug(sprintf('checking if %d shouldbe followed by %d', $number, $nextNumber));
 
                 if (array_key_exists($nextNumber, $this->orderRules) && in_array($number, $this->orderRules[$nextNumber])) {
                     return false;
@@ -89,7 +89,7 @@ class Day05 extends AbstractDay
             $pageNumberSum += $line[floor(count($line) / 2)];
         }
 
-        printf('oplossing is %d' . PHP_EOL, $pageNumberSum);
+        $this->log(sprintf('oplossing is %d', $pageNumberSum));
     }
 
     private function sortByOrderRules(array $line): array

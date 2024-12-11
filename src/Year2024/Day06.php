@@ -9,20 +9,13 @@ use AdventOfCode\AbstractDay;
 class Day06 extends AbstractDay
 {
     private array $matrix = [];
-    private bool $isLive = false;
     private const SLEEP_TIME = 100_000;
-
-    public function __construct(string $dataSet)
-    {
-        parent::__construct($dataSet);
-        $this->isLive = $dataSet === 'live';
-    }
 
     public function part1(): void
     {
         $this->createMatrix();
 
-        print('Guard start walk!' . PHP_EOL . PHP_EOL);
+        $this->debug('Guard start walk!');
         $this->printMatrix();
 
         $outOfBounds = false;
@@ -46,7 +39,7 @@ class Day06 extends AbstractDay
             $steppedSpots += substr_count(implode('', $line), 'X');
         }
 
-        printf('The guard occupied %d spots before moving out of bounds'. PHP_EOL . PHP_EOL, $steppedSpots);
+        $this->log(sprintf('The guard occupied %d spots before moving out of bounds' . PHP_EOL, $steppedSpots));
         $this->isLive = false;
         $this->printMatrix();
     }
@@ -103,9 +96,7 @@ class Day06 extends AbstractDay
 
     private function moveGuard(int $x, int $y): array
     {
-        if ($this->isLive === false) {
-            printf('Guard moving forward.' . PHP_EOL . PHP_EOL);
-        }
+        $this->debug(sprintf('Guard moving forward.' . PHP_EOL));
         $guardChar = $this->matrix[$y][$x];
 
         //mark last guard position
@@ -122,9 +113,7 @@ class Day06 extends AbstractDay
 
     private function rotateGuard(int $x, int $y): void
     {
-        if ($this->isLive === false) {
-            printf('Guard turning right and moving forward.' . PHP_EOL . PHP_EOL);
-        }
+        $this->debug(sprintf('Guard turning right and moving forward.' . PHP_EOL));
         $guardChar = $this->matrix[$y][$x];
         switch ($guardChar) {
             case 'v': $this->matrix[$y][$x] = '<'; break;
@@ -137,9 +126,7 @@ class Day06 extends AbstractDay
 
     private function isGuardOutOfBounds($newpos): bool
     {
-        if ($this->isLive === false) {
-            print('Guard is out of bounds!' . PHP_EOL . PHP_EOL);
-        }
+        $this->debug('Guard is out of bounds!' . PHP_EOL);
         [$x, $y] = $newpos;
         $guardChar = $this->matrix[$y][$x];
 

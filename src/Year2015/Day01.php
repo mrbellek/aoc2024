@@ -14,11 +14,11 @@ class Day01 extends AbstractDay
 
         $upCount = substr_count($instruct, '(');
         $downCount = substr_count($instruct, ')');
-        printf(
-            'Input %s puts Santa on floor %d.' . PHP_EOL,
+        $this->log(sprintf(
+            'Input %s puts Santa on floor %d.',
             strlen($instruct) > 20 ? substr($instruct, 0, 20) . '...' : $instruct,
             $upCount - $downCount
-        );
+        ));
     }
 
     public function part2(): void
@@ -39,6 +39,6 @@ class Day01 extends AbstractDay
             }
         }
 
-        printf('Final floor is %d, and Santa went into the basement first at instruct %d' . PHP_EOL, $currentFloor, $basementTrigger+1);
+        $this->log(sprintf('Final floor is %d, and Santa went into the basement first at instruct %d', $currentFloor, $basementTrigger + 1));
     }
 }
