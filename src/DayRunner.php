@@ -187,6 +187,7 @@ class DayRunner
         chdir($this->home);
         printf('Loading file %s..' . PHP_EOL, $classFile);
         include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
+        include_once sprintf('%1$s/src/MatrixTrait.php', $this->home);
         include_once $classFile;
 
         $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);

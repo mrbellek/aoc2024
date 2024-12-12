@@ -5,24 +5,18 @@ declare(strict_types=1);
 namespace AdventOfCode\Year2024;
 
 use AdventOfCode\AbstractDay;
+use AdventOfCode\MatrixTrait;
 
 class Day10 extends AbstractDay
 {
-    private array $matrix;
+    use MatrixTrait;
 
     public function part1(): void
     {
-        $this->createMatrix();
         $trailEnds = $this->findTrailEnds();
         var_dump($trailEnds);
         //????
-    }
-
-    private function createMatrix(): void
-    {
-        foreach ($this->input as $y => $line) {
-            $this->matrix[$y] = str_split($line, 1);
-        }
+        die('unfinished!');
     }
 
     private function findTrailEnds(): array

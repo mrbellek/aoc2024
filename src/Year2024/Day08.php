@@ -5,18 +5,11 @@ declare(strict_types=1);
 namespace AdventOfCode\Year2024;
 
 use AdventOfCode\AbstractDay;
-
-use function array_column;
+use AdventOfCode\MatrixTrait;
 
 class Day08 extends AbstractDay
 {
-    private array $matrix = [];
-
-    public function __construct(string $dataSet)
-    {
-        parent::__construct($dataSet);
-        $this->createMatrix();
-    }
+    use MatrixTrait;
 
     public function part1(): void
     {
@@ -110,7 +103,7 @@ class Day08 extends AbstractDay
 
     private function printMatrixWithAntinodes(array $antinodes): void
     {
-        $this->debug(PHP_EOL . 'With antinodes:' . PHP_EOL . PHP_EOL);
+        $this->debug(PHP_EOL . 'With antinodes:' . PHP_EOL);
         $matrix = $this->matrix;
         foreach ($antinodes as $antinode) {
             if (!$this->isPointOccupied($antinode)) {
@@ -131,12 +124,5 @@ class Day08 extends AbstractDay
         }
 
         return $uniqueNodes;
-    }
-    
-    private function createMatrix(): void
-    {
-        foreach ($this->input as $y => $line) {
-            $this->matrix[$y] = str_split($line);
-        }
     }
 }

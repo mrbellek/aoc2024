@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace AdventOfCode\Year2024;
 
 use AdventOfCode\AbstractDay;
+use AdventOfCode\MatrixTrait;
 
 class Day06 extends AbstractDay
 {
+    use MatrixTrait;
+
     private array $matrix = [];
     private const SLEEP_TIME = 100_000;
 
     public function part1(): void
     {
-        $this->createMatrix();
-
         $this->debug('Guard start walk!');
         $this->printMatrix();
 
@@ -42,18 +43,6 @@ class Day06 extends AbstractDay
         $this->log(sprintf('The guard occupied %d spots before moving out of bounds' . PHP_EOL, $steppedSpots));
         $this->isLive = false;
         $this->printMatrix();
-    }
-
-    public function part2(): void
-    {
-        $this->createMatrix();
-    }
-
-    private function createMatrix(): void
-    {
-        foreach ($this->input as $i => $line) {
-            $this->matrix[$i] = str_split($line);
-        }
     }
 
     private function printMatrix(): void
