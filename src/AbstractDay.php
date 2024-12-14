@@ -30,11 +30,21 @@ abstract class AbstractDay
         switch ($dataSet) {
             case 'test':
                 $this->isLive = false;
-                $this->input = file(sprintf('./data/%1$d/sample%2$02d.txt', $year, $day), FILE_IGNORE_NEW_LINES);
+                $sampleFile = sprintf('./data/%1$d/sample%2$02d.txt', $year, $day);
+                if (!is_readable($sampleFile)) {
+                    $this->log(sprintf('FATAL: Cannot find input file %s!', $sampleFile));
+                    exit(1);
+                }
+                $this->input = file($sampleFile, FILE_IGNORE_NEW_LINES);
                 break;
             case 'live':
                 $this->isLive = true;
-                $this->input = file(sprintf('./data/%1$d/input%2$02d.txt', $year, $day), FILE_IGNORE_NEW_LINES);
+                $inputFile = sprintf('./data/%1$d/input%2$02d.txt', $year, $day);
+                if (!is_readable($inputFile)) {
+                    $this->log(sprintf('FATAL: Cannot find input file %s!', $inputFile));
+                    exit(1);
+                }
+                $this->input = file($inputFile, FILE_IGNORE_NEW_LINES);
                 break;
         }
     }

@@ -185,6 +185,11 @@ class DayRunner
         $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
 
         chdir($this->home);
+        if (is_readable($classFile) === false) {
+            printf('FATAL: Cannot find class file for Year%d/Day%s!' . PHP_EOL, $year, $day);
+            print($classFile . PHP_EOL);
+            exit(1);
+        }
         printf('Loading file %s..' . PHP_EOL, $classFile);
         include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
         include_once sprintf('%1$s/src/MatrixTrait.php', $this->home);
