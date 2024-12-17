@@ -10,36 +10,39 @@ class Day09 extends AbstractDay
 {
     public function part1(): void
     {
-        $blockString = $this->convertInputToBlockString($this->input[0]);
-        $this->log(implode('', $blockString));
+        $blockArray = $this->convertInputToBlockString($this->input[0]);
+        if (!$this->isLive) {
+            $this->log(implode('', $blockArray));
+        }
 
         //defrag
-        $length = count($blockString);
+        $length = count($blockArray);
         for ($i = $length - 1; $i >= 0; $i--) {
-            $char = $blockString[$i];
+            $char = $blockArray[$i];
             if ($char === '.') {
                 continue;
             }
 
-            $firstDotPos = array_search('.', $blockString, true);
+            $firstDotPos = array_search('.', $blockArray, true);
             if ($firstDotPos === false) {
-                $this->debug($blockString);
+                $this->debug($blockArray);
                 die('no dot found?!');
             }
 
+            //@TODO a block id is only one space, not however long the stringed id is :(
             $charLen = strlen($char);
             for ($j = 0; $j < $charLen; $j++) {
-                $blockString[$firstDotPos + $j] = $char[$j];
+                $blockArray[$firstDotPos + $j] = $char[$j];
             }
-            $blockString[$i] = str_repeat('.', strlen($char));
+            $blockArray[$i] = str_repeat('.', strlen($char));
 
-            $this->debug(implode('', $blockString));
+            $this->debug(implode('', $blockArray));
             if (!$this->isLive) {
                 usleep(100_000);
             }
 
             //stop when first dot is beyond cursor
-            if (in_array('.', array_slice($blockString, 0, $i), true) === false) {
+            if (in_array('.', array_slice($blockArray, 0, $i), true) === false) {
                 break;
             }
         }
@@ -47,7 +50,7 @@ class Day09 extends AbstractDay
         //checksum
         $checksum = 0;
         for ($i = 0; $i < $length; $i++) {
-            $checksum += $i * (int)$blockString[$i];
+            $checksum += $i * (int)$blockArray[$i];
         }
         $this->log(sprintf('Done! Checksum is %d.', $checksum));
     }
