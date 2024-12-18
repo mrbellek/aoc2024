@@ -22,7 +22,55 @@ class Day14 extends AbstractDay
         $this->log(sprintf('Bots finished moving for %d seconds at once.', $seconds));
         $this->printBots();
         $safety = $this->calcSafetyFactor();
-        $this->log(sprintf('The resulting safety factor is: %f', $safety));
+        $this->log(sprintf('The resulting safety factor is: %1$.0f', $safety));
+    }
+
+    public function part2(): void
+    {
+        $seconds = 10000;
+        $this->parseBots();
+        for ($i = 0; $i < $seconds; $i++) {
+            $this->moveBots(1);
+            if ($this->hasChristmasTree()) {
+                $this->printBots();
+                $this->log(sprintf('Found something that looks like a christmas tree after %d seconds!', $i + 1));
+                return;
+            }
+        }
+
+        $this->log(sprintf('Didn\'t find anything christmassy after %d seconds!', $seconds));
+    }
+
+    private function hasChristmasTree(): bool
+    {
+        if (!$this->isLive) {
+            $this->debug('Can\'t check for christmas tree in test data!');
+            die(1);
+        }
+
+        $matrix = [];
+        for ($i = 0; $i < $this->roomSizeY; $i++) {
+            $matrix[] = str_split(str_repeat('.', $this->roomSizeX));
+        }
+
+        foreach ($this->bots as $bot) {
+            $x = $bot['x'];
+            $y = $bot['y'];
+            if ($matrix[$y][$x] === '.') {
+                $matrix[$y][$x] = '1';
+            } else {
+                $matrix[$y][$x]++;
+            }
+        }
+
+        //assume that if we see 10 bots in a row, there's something going on >_>
+        foreach ($matrix as $line) {
+            if (preg_match('/\d{10,}/', implode('', $line)) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function calcSafetyFactor(): float
@@ -33,30 +81,30 @@ class Day14 extends AbstractDay
         $roomSizeY = $this->isLive ? $this->roomSizeY : $this->sampleRoomSizeY;
         $q1Range = [
             'xmin' => 0,
-            'xmax' => floor($roomSizeX / 2),
+            'xmax' => floor($roomSizeX / 2 - 1),
             'ymin' => 0,
-            'ymax' => floor($roomSizeY / 2),
+            'ymax' => floor($roomSizeY / 2) - 1,
         ];
         $q2Range = [
-            'xmin' => ceil($roomSizeX / 2) + 1,
-            'xmax' => $roomSizeX,
+            'xmin' => ceil($roomSizeX / 2),
+            'xmax' => $roomSizeX - 1,
             'ymin' => 0,
-            'ymax' => floor($roomSizeY / 2),
+            'ymax' => floor($roomSizeY / 2) - 1,
         ];
         $q3Range = [
             'xmin' => 0,
-            'xmax' => floor($roomSizeX / 2),
-            'ymin' => ceil($roomSizeY / 2) + 1,
-            'ymax' => $roomSizeY,
+            'xmax' => floor($roomSizeX / 2) - 1,
+            'ymin' => ceil($roomSizeY / 2),
+            'ymax' => $roomSizeY - 1,
         ];
         $q4Range = [
-            'xmin' => ceil($roomSizeX / 2) + 1,
-            'xmax' => $roomSizeX,
-            'ymin' => ceil($roomSizeY / 2) + 1,
-            'ymax' => $roomSizeY,
+            'xmin' => ceil($roomSizeX / 2),
+            'xmax' => $roomSizeX - 1,
+            'ymin' => ceil($roomSizeY / 2),
+            'ymax' => $roomSizeY - 1,
         ];
 
-        foreach ($this->bots as $bot) {
+        foreach ($this->bots as $i => $bot) {
             if ($bot['x'] >= $q1Range['xmin'] && $bot['x'] <= $q1Range['xmax'] && $bot['y'] >= $q1Range['ymin'] && $bot['y'] <= $q1Range['ymax']) {
                 $this->debug(sprintf('bot at [%d,%d] falls in Q1!', $bot['x'], $bot['y']));
                 $quadCount1++;
@@ -71,6 +119,7 @@ class Day14 extends AbstractDay
                 $quadCount4++;
             } else {
                 //bot falls in middle line horizontally or vertically
+                $this->debug(sprintf('bot at [%d,%d] is outside any quadrant.', $bot['x'], $bot['y']));
             }
         }
 
