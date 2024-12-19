@@ -212,10 +212,12 @@ class DayRunner
         $runtime = microtime(true) - $t;
 
         print(str_repeat('=', 30) . PHP_EOL);
-        if ($runtime < 10) {
+        if ($runtime < 0.1) {
             printf('Runtime: %1$.3f us' . PHP_EOL, 1_000_000 * $runtime);
-        } else {
+        } elseif ($runtime < 1) {
             printf('Runtime: %1$.3f ms' . PHP_EOL, 1_000 * $runtime);
+        } else {
+            printf('Runtime: %1$.3f s' . PHP_EOL, $runtime);
         }
     }
 

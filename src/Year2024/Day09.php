@@ -38,7 +38,7 @@ class Day09 extends AbstractDay
 
             $this->debug(implode('', $blockArray));
             if (!$this->isLive) {
-                usleep(100_000);
+                usleep(10_000);
             }
 
             //stop when first dot is beyond cursor
