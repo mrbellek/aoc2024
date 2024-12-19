@@ -10,6 +10,9 @@ use function str_starts_with;
 
 class Day03 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
+
     public function part1(): void
     {
         $sum = 0;

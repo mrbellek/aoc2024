@@ -44,6 +44,7 @@ class DayRunner
          * - [2] Change part to [other part]
          * - [3] Change day (submenu)
          * - [4] Change year (submenu)
+         * - [r] Completion report
          */
         echo 'Choose a puzzle solution to run:' . PHP_EOL;
         $this->printSelectedYearDayPart();
@@ -61,6 +62,7 @@ class DayRunner
             case '2': $this->flipPart(); $this->showMenu(); break;
             case '3': $this->showDayMenu(); break;
             case '4': $this->showYearMenu(); break;
+            case 'r': $this->createCompletionReport(); break;
             case 'q':
             case 'x': return;
         }
@@ -119,6 +121,8 @@ class DayRunner
         printf('[2] Change part to %d' . PHP_EOL, $this->selectedPart === 1 ? 2 : 1);
         print('[3] Change day ->' . PHP_EOL);
         print('[4] Change year ->' . PHP_EOL);
+        print('[r] Completion report' . PHP_EOL);
+        print('[x] Exit' . PHP_EOL);
     }
     
     private function flipEnv(): void
@@ -221,5 +225,51 @@ class DayRunner
         $userInput = fgets(fopen('php://stdin', 'r'));
 
         return rtrim($userInput);
+    }
+
+    private function createCompletionReport(): void
+    {
+        $completedDays = [];
+
+        chdir($this->home);
+        include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
+        include_once sprintf('%1$s/src/MatrixTrait.php', $this->home);
+        foreach ($this->availableDays as $year => $days) {
+            $completedDays[$year] = [];
+            sort($days);
+            foreach ($days as $day) {
+                $completedDays[$year][$day] = '.';
+                $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
+                include_once $classFile;
+
+                $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
+                if ($className::PART1_COMPLETE) {
+                    $completedDays[$year][$day] = '*';
+                }
+                if ($className::PART2_COMPLETE) {
+                    $completedDays[$year][$day] = '**';
+                }
+            }
+        }
+
+        $this->showCompletionReport($completedDays);
+    }
+
+    private function showCompletionReport(array $completedDays): void
+    {
+        ksort($completedDays);
+        $years = array_keys($completedDays);
+        print '       | ' . implode(' | ', $years) . PHP_EOL;
+        print str_repeat('-', 8 + count($years) * 7) . PHP_EOL;
+        for ($i = 1; $i <= 25; $i++) {
+            $day = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
+            printf('Day %s |  ', $day);
+            foreach ($years as $year) {
+                print str_pad($completedDays[$year][$day] ?? '', 4, ' ', STR_PAD_RIGHT);
+                echo '|  ';
+            }
+            echo PHP_EOL;
+
+        }
     }
 }

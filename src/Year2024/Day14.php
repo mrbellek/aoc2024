@@ -8,6 +8,9 @@ use AdventOfCode\AbstractDay;
 
 class Day14 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
+
     private array $bots;
     private int $sampleRoomSizeX = 11;
     private int $sampleRoomSizeY = 7;

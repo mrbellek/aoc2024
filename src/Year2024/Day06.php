@@ -11,7 +11,8 @@ class Day06 extends AbstractDay
 {
     use MatrixTrait;
 
-    private array $matrix = [];
+    public const PART1_COMPLETE = true;
+
     private const SLEEP_TIME = 100_000;
 
     public function part1(): void

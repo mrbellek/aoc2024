@@ -9,6 +9,9 @@ abstract class AbstractDay
     protected array $input;
     protected bool $isLive;
 
+    public const PART1_COMPLETE = false;
+    public const PART2_COMPLETE = false;
+
     public function __construct(string $dataSet)
     {
         /**

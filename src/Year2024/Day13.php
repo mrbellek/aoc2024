@@ -8,6 +8,9 @@ use AdventOfCode\AbstractDay;
 
 class Day13 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
+
     private $machines = [];
 
     public function part1(): void

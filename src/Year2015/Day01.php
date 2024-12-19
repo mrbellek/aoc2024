@@ -8,6 +8,9 @@ use AdventOfCode\AbstractDay;
 
 class Day01 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
+
     public function part1(): void
     {
         $instruct = $this->input[0];

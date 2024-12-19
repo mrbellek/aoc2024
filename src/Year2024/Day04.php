@@ -8,6 +8,8 @@ use AdventOfCode\AbstractDay;
 
 class Day04 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+
     private array $matrix = [];
 
     public function part1(): void

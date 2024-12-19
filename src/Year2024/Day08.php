@@ -11,6 +11,8 @@ class Day08 extends AbstractDay
 {
     use MatrixTrait;
 
+    public const PART1_COMPLETE = true;
+
     public function part1(): void
     {
         //how many of the nodes in the matrix have an anti-node?

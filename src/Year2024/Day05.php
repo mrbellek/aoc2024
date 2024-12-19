@@ -8,6 +8,9 @@ use AdventOfCode\AbstractDay;
 
 class Day05 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
+
     private array $orderRules = [];
     private array $pageLines = [];
 
