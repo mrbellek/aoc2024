@@ -7,6 +7,7 @@ namespace AdventOfCode;
 abstract class AbstractDay
 {
     protected array $input;
+    protected string $inputStr;
     protected bool $isLive;
 
     public const PART1_COMPLETE = false;
@@ -39,6 +40,7 @@ abstract class AbstractDay
                     exit(1);
                 }
                 $this->input = file($sampleFile, FILE_IGNORE_NEW_LINES);
+                $this->inputStr = file_get_contents($sampleFile);
                 break;
             case 'live':
                 $this->isLive = true;
@@ -48,6 +50,7 @@ abstract class AbstractDay
                     exit(1);
                 }
                 $this->input = file($inputFile, FILE_IGNORE_NEW_LINES);
+                $this->inputStr = file_get_contents($inputFile);
                 break;
         }
     }

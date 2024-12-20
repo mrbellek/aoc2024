@@ -261,8 +261,9 @@ class DayRunner
     {
         ksort($completedDays);
         $years = array_keys($completedDays);
-        print '       | ' . implode(' | ', $years) . PHP_EOL;
-        print str_repeat('-', 8 + count($years) * 7) . PHP_EOL;
+        print '       | ' . implode(' | ', $years) . ' |' . PHP_EOL;
+        print str_repeat('-', 7) . '+';
+        print str_repeat('------+', count($years)) . PHP_EOL;
         for ($i = 1; $i <= 25; $i++) {
             $day = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
             printf('Day %s |  ', $day);
