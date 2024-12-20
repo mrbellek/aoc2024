@@ -21,6 +21,9 @@ class Day19 extends AbstractDay
             $impossible = false;
             while ($pos < strlen($design)) {
                 $lastPos = $pos;
+                //the problem here is that once a partial solution is wrong, any
+                //of the used parts might have a shorter part that is correct.
+                //recursion is probably the solution here?
                 foreach ($this->patterns as $pattern) {
                     if (strpos($design, $pattern, $pos) === $pos) {
                         $pos += strlen($pattern);
@@ -29,13 +32,14 @@ class Day19 extends AbstractDay
                 }
                 if ($lastPos === $pos) {
                     $impossible = true;
+                    $this->log(sprintf('[%d] %s: STOPPED %s', $index, $design, ltrim($patternStr, '+')));
                     break;
                 }
             }
             if ($impossible) {
-                $this->log(sprintf('Design %d %s cannot be made!', $index, $design));
+//                $this->log(sprintf('[%d] %s cannot be made!', $index, $design));
             } else {
-                $this->debug(sprintf('Design %d %s can be made with pattern sequence %s!', $index, $design, ltrim($patternStr, '+')));
+//                $this->log(sprintf('[%d] %s: %s', $index, $design, ltrim($patternStr, '+')));
                 $possibleCount++;
             }
             $patternStr = '';
