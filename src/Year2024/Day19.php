@@ -24,6 +24,8 @@ class Day19 extends AbstractDay
                 //the problem here is that once a partial solution is wrong, any
                 //of the used parts might have a shorter part that is correct.
                 //recursion is probably the solution here?
+
+                //@TODO recursion! findNextFit() finding a fit, then calling itself with the remainder of the pattern string
                 foreach ($this->patterns as $pattern) {
                     if (strpos($design, $pattern, $pos) === $pos) {
                         $pos += strlen($pattern);
