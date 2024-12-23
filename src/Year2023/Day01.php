@@ -17,9 +17,9 @@ class Day01 extends AbstractDay
         $sumOfNumbers = 0;
         foreach ($this->input as $line) {
             $this->debug(sprintf('turned %s into ', $line));
-            $line = replaceNumberWordsWithDigits($line);
+            $line = $this->replaceNumberWordsWithDigits($line);
             $this->debug(sprintf('%s', $line));
-            $digits = getFirstAndLastDigitsFromLine($line);
+            $digits = $this->getFirstAndLastDigitsFromLine($line);
             $number = intval($digits[0] . $digits[1]);
             $sumOfNumbers += $number;
         }
