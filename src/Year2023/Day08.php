@@ -10,7 +10,7 @@ use RuntimeException;
 class Day08 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
-    public const PART2_COMPLETE = false;
+    public const PART2_COMPLETE = true;
 
     public function part1(): void
     {
