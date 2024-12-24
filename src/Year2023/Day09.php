@@ -15,7 +15,7 @@ class Day09 extends AbstractDay
     {
         $totalNextNumbers = 0;
         $totalPreviousNumbers = 0;
-        foreach ($input as $line) {
+        foreach ($this->input as $line) {
             $numbers = explode(' ', $line);
             [$nextNumber, $previousNumber] = $this->findNextAndPreviousNumber($numbers);
             $this->debug(sprintf('Next line in number sequence "%s" is: %s', $line, $nextNumber));
