@@ -35,7 +35,7 @@ class Day02 extends AbstractDay
         ));
     }
 
-    public functiom part2(): void
+    public function part2(): void
     {
         $maxRed = 12;
         $maxGreen = 13;
