@@ -14,15 +14,37 @@ class Day08 extends AbstractDay
 
     public function part1(): void
     {
+        $instructions = $this->input[0];
+        $this->debug(sprintf('Instructions for %d lines: %s', count($this->input) - 2, $instructions));
+        $nodes = $this->parseNodes(array_slice($this->input, 2));
+        
+        $startingNodes = $this->findStartingNodes($nodes);
+        $this->debug(sprintf('Found %d nodes ending in "A"! (%s)', count($startingNodes), implode(',', $startingNodes));
+        $stepsToZForNode = [];
+        foreach ($startingNodes as $startingNode) {
+            $stepsToZForNode[] = $this->findStepsToZForNode($startingNode, $nodes, $instructions);
+        }
+        $this->log(sprintf('Found steps to Z for all nodes (%s), and the LCM is: %s',
+            implode(',', $startingNodes),
+            $this->getLcmForArray($stepsToZForNode)
+        ));
+    }
+
+    public function part2(): void
+    {
+        $instructions = $this->input[0];
+        $this->debug(sprintf('Instructions for %d lines: %s', count($this->input) - 2, $instructions));
+        $nodes = $this->parseNodes(array_slice($this->input, 2));
+       
         $currentStep = 0;
         $currentNode = 'AAA';
-        $nextInstruction = getNextInstruction($instructions, $currentStep);
+        $nextInstruction = $this->getNextInstruction($instructions, $currentStep);
         $this->log(sprintf('Starting! First node: %s', $currentNode));
         while ($currentNode !== 'ZZZ') {
             $currentStep++;
             $nextNode = $nodes[$currentNode][$nextInstruction];
             $this->debug(sprintf('Choosing %s node: %s', $nextInstruction, $nextNode));
-            $nextInstruction = getNextInstruction($instructions, $currentStep);
+            $nextInstruction = $this->getNextInstruction($instructions, $currentStep);
             $currentNode = $nextNode;
             if ($currentStep > 100000) die('shit broken' . PHP_EOL);
         }
