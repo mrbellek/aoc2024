@@ -20,7 +20,7 @@ class Day02 extends AbstractDay
         $validCount = 0;
         $sumOfGameIds = 0;
         $sumOfGamePowers = 0;
-        foreach ($input as $line) {
+        foreach ($this->input as $line) {
             $gameInfo = $this->getGameInfo($line);
             if ($this->isGamePossible($gameInfo, $maxRed, $maxGreen, $maxBlue)) {
                 $sumOfGameIds += key($gameInfo);
@@ -29,7 +29,7 @@ class Day02 extends AbstractDay
         }
         
         $this->log(sprintf('Processed %d games, but only %d were possible with given restrictions, and the sum of game ids was %d.',
-            count($input),
+            count($this->input),
             $validCount,
             $sumOfGameIds
         ));
@@ -44,14 +44,14 @@ class Day02 extends AbstractDay
         $validCount = 0;
         $sumOfGameIds = 0;
         $sumOfGamePowers = 0;
-        foreach ($input as $line) {
+        foreach ($this->input as $line) {
             $gameInfo = $this->getGameInfo($line);
             
             $gamePower = $this->getGamePower($gameInfo);
             $sumOfGamePowers += $gamePower;
         }
 
-        $this->log(sprintf('Processed %d games, by their powers combined we got %s', count($input), $sumOfGamePowers));
+        $this->log(sprintf('Processed %d games, by their powers combined we got %s', count($this->input), $sumOfGamePowers));
     }
 
     public function getGamePower(array $gameInfo): int
