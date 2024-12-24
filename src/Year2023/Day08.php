@@ -19,7 +19,7 @@ class Day08 extends AbstractDay
         $nodes = $this->parseNodes(array_slice($this->input, 2));
         
         $startingNodes = $this->findStartingNodes($nodes);
-        $this->debug(sprintf('Found %d nodes ending in "A"! (%s)', count($startingNodes), implode(',', $startingNodes));
+        $this->debug(sprintf('Found %d nodes ending in "A"! (%s)', count($startingNodes), implode(',', $startingNodes)));
         $stepsToZForNode = [];
         foreach ($startingNodes as $startingNode) {
             $stepsToZForNode[] = $this->findStepsToZForNode($startingNode, $nodes, $instructions);
