@@ -8,11 +8,11 @@ use function sprintf;
 
 class DayRunner
 {
-    private const string YEAR_PREFIX = 'Year';
-    private const string DAY_PREFIX = 'Day';
+    private const YEAR_PREFIX = 'Year';
+    private const DAY_PREFIX = 'Day';
 
-    private const string ENV_TEST = 'test';
-    private const string ENV_LIVE = 'live';
+    private const ENV_TEST = 'test';
+    private const ENV_LIVE = 'live';
 
     private string $home;
     private array $availableDays = [];
@@ -189,13 +189,16 @@ class DayRunner
     private function showYearMenu(): void
     {
         print PHP_EOL . 'Choose a year:' . PHP_EOL;
-        foreach (array_keys($this->availableDays) as $year) {
+        $years = array_keys($this->availableDays);
+        foreach ($years as $year) {
             printf('[%1$d] Year%1$d' . PHP_EOL, $year);
         }
         $input = $this->getInput('>');
-        if (is_numeric($input) && isset($year)) {
-            $this->selectedYear = (int)$year;
+        if (is_numeric($input) && in_array(intval($input), $years)) {
+            $this->selectedYear = (int)$input;
             $this->selectedDay = $this->availableDays[$year][0];
+        } else {
+            printf('Invalid year "%s"' . PHP_EOL, $input);
         }
 
         $this->showMenu();

@@ -52,6 +52,9 @@ abstract class AbstractDay
                 $this->input = file($inputFile, FILE_IGNORE_NEW_LINES);
                 $this->inputStr = file_get_contents($inputFile);
                 break;
+            default:
+                $this->log(sprintf('Invalid environment "%s"', $dataSet));
+                exit(1);
         }
     }
 
