@@ -8,6 +8,8 @@ use AdventOfCode\AbstractDay;
 
 class Day23 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+
     public function part1(): void
     {
         $connections = $this->makeNetworkMap();
