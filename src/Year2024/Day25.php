@@ -14,6 +14,8 @@ class Day25 extends AbstractDay
 
     public function part1(): void
     {
+        //not sure why but for some stupid reason the day 25 input file
+        //uses different line endings than usual
         if ($this->isLive) {
             $this->ln = "\n";
         } else {

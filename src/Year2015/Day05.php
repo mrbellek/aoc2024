@@ -25,6 +25,10 @@ class Day05 extends AbstractDay
 
     public function part2(): void
     {
+        if (!$this->isLive) {
+            $this->input = file('data/2015/sample05-2.txt', FILE_IGNORE_NEW_LINES);
+        }
+
         $nice = 0;
         foreach ($this->input as $string) {
             if ($this->isNiceToo($string)) {
@@ -33,7 +37,7 @@ class Day05 extends AbstractDay
             }
         }
 
-        $this->log(sprintf('%d strins are NICE too', $string));
+        $this->log(sprintf('%d strings are NICE too', $nice));
     }
 
     private function isNice(string $string): bool
@@ -61,6 +65,17 @@ class Day05 extends AbstractDay
 
     private function isNiceToo(string $string): bool
     {
+        //contains a pair of any two letters that appears at least twice
+        //in the string without overlapping
+        if (preg_match('/(\w{2}).*\1/', $string) !== 1) {
+            return false;
+        }
+
+        //contains at least one letter which repeats with exactly one
+        //letter between them
+        if (preg_match('/(\w)\w\1/', $string) !== 1) {
+            return false;
+        }
 
         return true;
     }
