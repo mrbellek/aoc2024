@@ -36,6 +36,9 @@ class Day07 extends AbstractDay
             if ($i > 1000) {
                 die('duurt lang');
             }
+            if ($i === 1 && !$this->isLive) {
+                break;
+            }
         }
 
         ksort($this->wires);
@@ -99,7 +102,10 @@ class Day07 extends AbstractDay
                 break;
             case 'NOT':
                 if (isset($this->wires[$input1])) {
-                    $this->wires[$output] = 65536 + ~$this->wires[$input1];
+                    $this->wires[$output] = ~$this->wires[$input1];
+                    if ($this->wires[$output] < 0) {
+                        $this->wires[$output] += 65536;
+                    }
                     $executed = true;
                 }
                 break;
