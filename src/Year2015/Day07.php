@@ -52,9 +52,10 @@ class Day07 extends AbstractDay
             //123 -> x
             //x -> y
             return [
-                'oper' => 'COPY',
+                'oper' => 'SIGNAL',
                 'input1' => $m[1],
                 'output' => $m[2],
+                'raw' => $line,
             ];
 
         } elseif (preg_match('/^(\w+) ([A-Z]+) (\w+) -> (\w+)$/', $line, $m) === 1) {
@@ -64,6 +65,7 @@ class Day07 extends AbstractDay
                 'input1' => $m[1],
                 'input2' => $m[3],
                 'output' => $m[4],
+                'raw' => $line,
             ];
         } elseif (preg_match('/^([A-Z]+) (\w+) -> (\w+)$/', $line, $m) === 1) {
             //NOT x -> h
@@ -71,6 +73,7 @@ class Day07 extends AbstractDay
                 'oper' => $m[1],
                 'input1' => $m[2],
                 'output' => $m[3],
+                'raw' => $line,
             ];
         } else {
             $this->log(sprintf('huh? %s', $line));
@@ -87,7 +90,7 @@ class Day07 extends AbstractDay
 
         $executed = false;
         switch($oper) {
-            case 'COPY':
+            case 'SIGNAL':
                 if (is_numeric($input1)) {
                     //starting input
                     $this->wires[$output] = intval($input1);
@@ -107,30 +110,40 @@ class Day07 extends AbstractDay
                         $this->wires[$output] += 65536;
                     }
                     $executed = true;
+                } else {
+                    $this->log(sprintf('skipping because no input: %s', $op['raw']));
                 }
                 break;
             case 'AND':
                 if (isset($this->wires[$input1]) && isset($this->wires[$input2])) {
                     $this->wires[$output] = $this->wires[$input1] & $this->wires[$input2];
                     $executed = true;
+                } else {
+                    $this->log(sprintf('skipping because no input: %s', $op['raw']));
                 }
                 break;
             case 'OR':
                 if (isset($this->wires[$input1]) && isset($this->wires[$input2])) {
                     $this->wires[$output] = $this->wires[$input1] | $this->wires[$input2];
                     $executed = true;
+                } else {
+                    $this->log(sprintf('skipping because no input: %s', $op['raw']));
                 }
                 break;
             case 'LSHIFT':
                 if (isset($this->wires[$input1])) {
                     $this->wires[$output] = $this->wires[$input1] << $input2;
                     $executed = true;
+                } else {
+                    $this->log(sprintf('skipping because no input: %s', $op['raw']));
                 }
                 break;
             case 'RSHIFT':
                 if (isset($this->wires[$input1])) {
                     $this->wires[$output] = $this->wires[$input1] >> $input2;
                     $executed = true;
+                } else {
+                    $this->log(sprintf('skipping because no input: %s', $op['raw']));
                 }
                 break;
             default:
