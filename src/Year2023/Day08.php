@@ -46,7 +46,7 @@ class Day08 extends AbstractDay
             $this->debug(sprintf('Choosing %s node: %s', $nextInstruction, $nextNode));
             $nextInstruction = $this->getNextInstruction($instructions, $currentStep);
             $currentNode = $nextNode;
-            if ($currentStep > 100000) die('shit broken' . PHP_EOL);
+            if ($currentStep > 100000) $this->fatal('shit broken');
         }
         $this->log(sprintf('Arrived at node ZZZ! It took %d steps.', $currentStep));
         

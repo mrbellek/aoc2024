@@ -1,6 +1,6 @@
 <?php
 $argv = $_SERVER['argv'];
 
-include_once './src/DayRunner.php';
+require 'vendor/autoload.php';
 
 (new AdventOfCode\DayRunner($argv));

@@ -6,6 +6,8 @@ namespace AdventOfCode;
 
 abstract class AbstractDay
 {
+    use LoggerTrait;
+
     protected array $input;
     protected string $inputStr;
     protected bool $isLive;
@@ -36,8 +38,7 @@ abstract class AbstractDay
                 $this->isLive = false;
                 $sampleFile = sprintf('./data/%1$d/sample%2$02d.txt', $year, $day);
                 if (!is_readable($sampleFile)) {
-                    $this->log(sprintf('FATAL: Cannot find input file %s!', $sampleFile));
-                    exit(1);
+                    $this->fatal(sprintf('FATAL: Cannot find input file %s!', $sampleFile));
                 }
                 $this->input = file($sampleFile, FILE_IGNORE_NEW_LINES);
                 $this->inputStr = file_get_contents($sampleFile);
@@ -46,15 +47,13 @@ abstract class AbstractDay
                 $this->isLive = true;
                 $inputFile = sprintf('./data/%1$d/input%2$02d.txt', $year, $day);
                 if (!is_readable($inputFile)) {
-                    $this->log(sprintf('FATAL: Cannot find input file %s!', $inputFile));
-                    exit(1);
+                    $this->fatal(sprintf('FATAL: Cannot find input file %s!', $inputFile));
                 }
                 $this->input = file($inputFile, FILE_IGNORE_NEW_LINES);
                 $this->inputStr = file_get_contents($inputFile);
                 break;
             default:
-                $this->log(sprintf('Invalid environment "%s"', $dataSet));
-                exit(1);
+                $this->fatal(sprintf('Invalid environment "%s"', $dataSet));
         }
     }
 
@@ -66,17 +65,5 @@ abstract class AbstractDay
     public function part2(): void
     {
         die('Part2 is unfinished for this day!');
-    }
-
-    protected function log(string $s): void
-    {
-        print($s . PHP_EOL);
-    }
-
-    protected function debug(string $s): void
-    {
-        if ($this->isLive === false) {
-            print($s . PHP_EOL);
-        }
     }
 }

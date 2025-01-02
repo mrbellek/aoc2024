@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AdventOfCode\Year2023;
 
 use AdventOfCode\AbstractDay;
-use RuntimeException;
 
 class Day01 extends AbstractDay
 {
@@ -31,7 +30,7 @@ class Day01 extends AbstractDay
     {
         $justDigits = preg_replace('/[^0-9]/', '', $line);
         if (strlen($justDigits) < 1) {
-            throw new RuntimeException(sprintf('er is niets over van regel %s' . PHP_EOL, $line));
+            $this->fatal(sprintf('er is niets over van regel %s', $line));
         }
         
         return [

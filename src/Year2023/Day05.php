@@ -24,11 +24,11 @@ class Day05 extends AbstractDay
         $locations = [];
         foreach ($seeds as $seed) {
             $soilForSeed =this-> getDestinationForSource($seed, $seedToSoilMap);
-            //printf('seed %s moet in soil %s' . PHP_EOL, $seed, $soilForSeed);
+            //$this->log(sprintf('seed %s moet in soil %s', $seed, $soilForSeed));
             $fertilizerForSoil = this->getDestinationForSource($soilForSeed, $soilToFertilizerMap);
-            //printf('soil %s moet in fertilizer %s' . PHP_EOL, $soilForSeed, $fertilizerForSoil);
+            //$this->log(sprintf('soil %s moet in fertilizer %s', $soilForSeed, $fertilizerForSoil));
             $waterForFertilizer = this->getDestinationForSource($fertilizerForSoil, $fertilizerToToWaterMap);
-            //printf('fertilizer %s moet in water %s' . PHP_EOL, $fertilizerForSoil, $waterForFertilizer);
+            //$this->log(sprintf('fertilizer %s moet in water %s', $fertilizerForSoil, $waterForFertilizer));
             $lightForWater = this->getDestinationForSource($waterForFertilizer, $waterToLightMap);
             $tempForLight = this->getDestinationForSource($lightForWater, $lightToTemperatureMap);
             $humidityToTemp = this->getDestinationForSource($tempForLight, $temperatureToHumidityMap);

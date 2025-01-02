@@ -41,7 +41,7 @@ class Day06 extends AbstractDay
             $steppedSpots += substr_count(implode('', $line), 'X');
         }
 
-        $this->log(sprintf('The guard occupied %d spots before moving out of bounds' . PHP_EOL, $steppedSpots));
+        $this->log(sprintf('The guard occupied %d spots before moving out of bounds', $steppedSpots));
         $this->isLive = false;
         $this->printMatrix();
     }
@@ -69,7 +69,7 @@ class Day06 extends AbstractDay
             }
         }
 
-        die('guard not found' . PHP_EOL);
+        $this->fatal('guard not found');
     }
 
     private function isGuardObstructed(int $x, int $y): bool
@@ -80,7 +80,7 @@ class Day06 extends AbstractDay
             case '>': return $this->matrix[$y][$x+1] === '#';
             case '<': return $this->matrix[$y][$x-1] === '#';
             case '^': return $this->matrix[$y-1][$x] === '#';
-            default: die('invalid guard position' . PHP_EOL);
+            default: $this->fatal('invalid guard position');
         }
     }
 
@@ -97,7 +97,7 @@ class Day06 extends AbstractDay
             case '>': $this->matrix[$y][$x+1] = $guardChar; return [$x+1, $y];
             case '<': $this->matrix[$y][$x-1] = $guardChar; return [$x-1, $y];
             case '^': $this->matrix[$y-1][$x] = $guardChar; return [$x, $y-1];
-            default: die('invalid guard position' . PHP_EOL);
+            default: $this->fatal('invalid guard position');
         }
     }
 
@@ -110,7 +110,7 @@ class Day06 extends AbstractDay
             case '>': $this->matrix[$y][$x] = 'v'; break;
             case '<': $this->matrix[$y][$x] = '^'; break;
             case '^': $this->matrix[$y][$x] = '>'; break;
-            default: die('invalid guard position' . PHP_EOL);
+            default: $this->fatal('invalid guard position');
         }
     }
 

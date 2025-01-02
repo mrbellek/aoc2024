@@ -8,6 +8,8 @@ use function sprintf;
 
 class DayRunner
 {
+    use LoggerTrait;
+
     private const YEAR_PREFIX = 'Year';
     private const DAY_PREFIX = 'Day';
 
@@ -48,7 +50,7 @@ class DayRunner
          * - [4] Change year (submenu)
          * - [r] Completion report
          */
-        echo 'Choose a puzzle solution to run:' . PHP_EOL;
+        $this->log('Choose a puzzle solution to run:');
         $this->printSelectedYearDayPart();
         $this->printMenu();
 
@@ -130,26 +132,26 @@ class DayRunner
 
     private function printSelectedYearDayPart(): void
     {
-        printf(
-            '[ ] Year%d / Day%s / Part%d / %s' . PHP_EOL,
+        $this->log(sprintf(
+            '[ ] Year%d / Day%s / Part%d / %s',
             $this->selectedYear,
             $this->selectedDay,
             $this->selectedPart,
             strtoupper($this->selectedEnv)
-        );
+        ));
     }
 
     private function printMenu(): void
     {
-        printf(
-            '[1] Change env to %s' . PHP_EOL,
+        $this->log(sprintf(
+            '[1] Change env to %s',
             strtoupper($this->selectedEnv === self::ENV_TEST ? self::ENV_LIVE : self::ENV_TEST)
-        );
-        printf('[2] Change part to %d' . PHP_EOL, $this->selectedPart === 1 ? 2 : 1);
-        print '[3] Change day ->' . PHP_EOL;
-        print '[4] Change year ->' . PHP_EOL;
-        print '[r] Completion report' . PHP_EOL;
-        print '[x] Exit' . PHP_EOL;
+        ));
+        $this->log(sprintf('[2] Change part to %d', $this->selectedPart === 1 ? 2 : 1));
+        $this->log('[3] Change day ->');
+        $this->log('[4] Change year ->');
+        $this->log('[r] Completion report');
+        $this->log('[x] Exit');
     }
 
     private function flipEnv(): void
@@ -174,9 +176,9 @@ class DayRunner
 
     private function showDayMenu(): void
     {
-        printf(PHP_EOL . 'Choose a day from year %d:' . PHP_EOL, $this->selectedYear);
+        $this->log(sprintf(PHP_EOL . 'Choose a day from year %d:', $this->selectedYear));
         foreach ($this->availableDays[$this->selectedYear] as $day) {
-            printf('[%1$d] Day%1$02d' . PHP_EOL, $day);
+            $this->log(sprintf('[%1$d] Day%1$02d', $day));
         }
         $input = $this->getInput('>');
         if (is_numeric($input)) {
@@ -188,17 +190,17 @@ class DayRunner
 
     private function showYearMenu(): void
     {
-        print PHP_EOL . 'Choose a year:' . PHP_EOL;
+        $this->log(PHP_EOL . 'Choose a year:');
         $years = array_keys($this->availableDays);
         foreach ($years as $year) {
-            printf('[%1$d] Year%1$d' . PHP_EOL, $year);
+            $this->log(sprintf('[%1$d] Year%1$d', $year));
         }
         $input = $this->getInput('>');
         if (is_numeric($input) && in_array(intval($input), $years)) {
             $this->selectedYear = (int)$input;
             $this->selectedDay = $this->availableDays[$year][0];
         } else {
-            printf('Invalid year "%s"' . PHP_EOL, $input);
+            $this->log(sprintf('Invalid year "%s"', $input));
         }
 
         $this->showMenu();
@@ -220,34 +222,30 @@ class DayRunner
 
         chdir($this->home);
         if (is_readable($classFile) === false) {
-            printf('FATAL: Cannot find class file for Year%d/Day%s!' . PHP_EOL, $year, $day);
-            print $classFile . PHP_EOL;
-            exit(1);
+            $this->log(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
+            $this->fatal($classFile);
         }
-        printf('Loading file %s..' . PHP_EOL, $classFile);
-        include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
-        include_once sprintf('%1$s/src/MatrixTrait.php', $this->home);
-        include_once $classFile;
+        $this->log(sprintf('Loading file %s..', $classFile));
 
         $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
-        printf('Loading class %s..' . PHP_EOL, $className);
+        $this->log(sprintf('Loading class %s..', $className));
         $obj = new $className($dataSet);
 
-        printf('Running part%d with %s data!' . PHP_EOL, $part, $dataSet);
-        print str_repeat('=', 30) . PHP_EOL;
+        $this->log(sprintf('Running part%d with %s data!', $part, $dataSet));
+        $this->log(str_repeat('=', 30));
         $partFunc = sprintf('part%d', $part);
 
         $t = microtime(true);
         $obj->{$partFunc}();
         $runtime = microtime(true) - $t;
 
-        print str_repeat('=', 30) . PHP_EOL;
+        $this->log(str_repeat('=', 30));
         if ($runtime < 0.1) {
-            printf('Runtime: %1$.3f us' . PHP_EOL, 1_000_000 * $runtime);
+            $this->log(sprintf('Runtime: %1$.3f us', 1_000_000 * $runtime));
         } elseif ($runtime < 1) {
-            printf('Runtime: %1$.3f ms' . PHP_EOL, 1_000 * $runtime);
+            $this->log(sprintf('Runtime: %1$.3f ms', 1_000 * $runtime));
         } else {
-            printf('Runtime: %1$.3f s' . PHP_EOL, $runtime);
+            $this->log(sprintf('Runtime: %1$.3f s', $runtime));
         }
     }
 
@@ -264,16 +262,12 @@ class DayRunner
         $completedDays = [];
 
         chdir($this->home);
-        include_once sprintf('%1$s/src/AbstractDay.php', $this->home);
-        include_once sprintf('%1$s/src/MatrixTrait.php', $this->home);
         foreach ($this->availableDays as $year => $days) {
             $completedDays[$year] = [];
             sort($days);
             foreach ($days as $day) {
                 $completedDays[$year][$day] = '.';
                 $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
-                include_once $classFile;
-
                 $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
                 if ($className::PART1_COMPLETE) {
                     $completedDays[$year][$day] = '*';
