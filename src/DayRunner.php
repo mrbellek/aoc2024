@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AdventOfCode;
 
+use AdventOfCode\Helpers\GlobHelper;
 use AdventOfCode\Helpers\InputHelper;
 use AdventOfCode\Traits\LoggerTrait;
 
@@ -26,8 +27,10 @@ class DayRunner
     private int $selectedPart;
     private string $selectedEnv;
 
-    public function __construct(array $argv)
-    {
+    public function __construct(
+        private readonly GlobHelper $globHelper,
+        array $argv
+    ) {
         $this->home = (string)getcwd();
         if (count($argv) > 1) {
             $this->parseArguments($argv);
@@ -105,35 +108,14 @@ class DayRunner
 
     private function scanAvailableDays(): void
     {
-        $years = $this->getYears();
+        $years = $this->globHelper->getYears();
         foreach ($years as $yearStr) {
             $year = (int)str_replace(self::YEAR_PREFIX, '', $yearStr);
             $this->availableDays[$year] = array_map(
                 static fn(string $day) => str_replace(self::DAY_PREFIX, '', $day),
-                $this->getDays($year)
+                $this->globHelper->getDays($year)
             );
         }
-    }
-
-    private function getYears(): array
-    {
-        chdir($this->home . '/src');
-        $years = glob('*', GLOB_ONLYDIR) ?: [];
-        rsort($years);
-
-        return $years;
-    }
-
-    private function getDays(int $year): array
-    {
-        chdir($this->home . '/src/Year' . $year);
-        $days = array_map(
-            static fn($file) => str_replace('.php', '', $file),
-            glob('*.php') ?: []
-        );
-        rsort($days);
-
-        return $days;
     }
 
     private function printSelectedYearDayPart(): void

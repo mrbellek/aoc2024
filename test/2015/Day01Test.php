@@ -14,7 +14,7 @@ class Day01Test extends TestCase
          * TODO:
          * v extract getting year to separate class so we can mock that
          * v extract getting sample/live data to separate class so we can mock that
-         * - extract globbing available Day classes, so we can mock that
+         * v extract globbing available Day classes, so we can mock that
          * 
          * - test correct output for simple cases, like '(' or ')'
          */
