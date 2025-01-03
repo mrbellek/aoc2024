@@ -16,7 +16,7 @@ class Day01Test extends TestCase
     private InputHelper&MockObject $inputHelper;
     private Logger&MockObject $logger;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->inputHelper = $this->createMock(InputHelper::class);
         $this->logger = $this->createMock(Logger::class);

@@ -209,8 +209,9 @@ class DayRunner
 
         chdir($this->home);
         if (is_readable($classFile) === false) {
-            $this->logger->log(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
-            $this->fatal($classFile);
+            $this->logger->fatal(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
+            $this->logger->fatal($classFile);
+            exit(1);
         }
         $this->logger->log(sprintf('Loading file %s..', $classFile));
 
