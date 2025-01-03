@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace AdventOfCode;
 
+use AdventOfCode\Helpers\InputHelper;
+use AdventOfCode\Traits\LoggerTrait;
+
 use function sprintf;
 
 class DayRunner
@@ -232,7 +235,7 @@ class DayRunner
 
         $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
         $this->log(sprintf('Loading class %s..', $className));
-        $obj = new $className($dataSet);
+        $obj = new $className(new InputHelper(), $dataSet);
 
         $this->log(sprintf('Running part%d with %s data!', $part, $dataSet));
         $this->log(str_repeat('=', 30));

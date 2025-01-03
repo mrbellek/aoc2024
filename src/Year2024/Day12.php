@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AdventOfCode\Year2024;
 
 use AdventOfCode\AbstractDay;
-use AdventOfCode\MatrixTrait;
+use AdventOfCode\Traits\MatrixTrait;
 
 class Day12 extends AbstractDay
 {
