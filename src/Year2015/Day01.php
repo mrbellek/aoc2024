@@ -42,6 +42,10 @@ class Day01 extends AbstractDay
             }
         }
 
-        $this->log(sprintf('Final floor is %d, and Santa went into the basement first at instruct %d', $currentFloor, $basementTrigger + 1));
+        if ($basementTrigger === null) {
+            $this->log(sprintf('Final floor is %d, but Santa did not go into the basement', $currentFloor));
+        } else {
+            $this->log(sprintf('Final floor is %d, and Santa went into the basement first at instruct %d', $currentFloor, $basementTrigger + 1));
+        }
     }
 }

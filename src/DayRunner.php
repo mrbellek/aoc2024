@@ -6,14 +6,12 @@ namespace AdventOfCode;
 
 use AdventOfCode\Helpers\GlobHelper;
 use AdventOfCode\Helpers\InputHelper;
-use AdventOfCode\Traits\LoggerTrait;
+use AdventOfCode\Helpers\Logger;
 
 use function sprintf;
 
 class DayRunner
 {
-    use LoggerTrait;
-
     private const YEAR_PREFIX = 'Year';
     private const DAY_PREFIX = 'Day';
 
@@ -29,6 +27,7 @@ class DayRunner
 
     public function __construct(
         private readonly GlobHelper $globHelper,
+        private readonly Logger $logger,
         array $argv
     ) {
         $this->home = (string)getcwd();
@@ -59,7 +58,7 @@ class DayRunner
          * - [4] Change year (submenu)
          * - [r] Completion report
          */
-        $this->log('Choose a puzzle solution to run:');
+        $this->logger->log('Choose a puzzle solution to run:');
         $this->printSelectedYearDayPart();
         $this->printMenu();
 
@@ -120,7 +119,7 @@ class DayRunner
 
     private function printSelectedYearDayPart(): void
     {
-        $this->log(sprintf(
+        $this->logger->log(sprintf(
             '[ ] Year%d / Day%s / Part%d / %s',
             $this->selectedYear,
             $this->selectedDay,
@@ -131,15 +130,15 @@ class DayRunner
 
     private function printMenu(): void
     {
-        $this->log(sprintf(
+        $this->logger->log(sprintf(
             '[1] Change env to %s',
             strtoupper($this->selectedEnv === self::ENV_TEST ? self::ENV_LIVE : self::ENV_TEST)
         ));
-        $this->log(sprintf('[2] Change part to %d', $this->selectedPart === 1 ? 2 : 1));
-        $this->log('[3] Change day ->');
-        $this->log('[4] Change year ->');
-        $this->log('[r] Completion report');
-        $this->log('[x] Exit');
+        $this->logger->log(sprintf('[2] Change part to %d', $this->selectedPart === 1 ? 2 : 1));
+        $this->logger->log('[3] Change day ->');
+        $this->logger->log('[4] Change year ->');
+        $this->logger->log('[r] Completion report');
+        $this->logger->log('[x] Exit');
     }
 
     private function flipEnv(): void
@@ -164,9 +163,9 @@ class DayRunner
 
     private function showDayMenu(): void
     {
-        $this->log(sprintf(PHP_EOL . 'Choose a day from year %d:', $this->selectedYear));
+        $this->logger->log(sprintf(PHP_EOL . 'Choose a day from year %d:', $this->selectedYear));
         foreach ($this->availableDays[$this->selectedYear] as $day) {
-            $this->log(sprintf('[%1$d] Day%1$02d', $day));
+            $this->logger->log(sprintf('[%1$d] Day%1$02d', $day));
         }
         $input = $this->getInput('>');
         if (is_numeric($input)) {
@@ -178,17 +177,17 @@ class DayRunner
 
     private function showYearMenu(): void
     {
-        $this->log(PHP_EOL . 'Choose a year:');
+        $this->logger->log(PHP_EOL . 'Choose a year:');
         $years = array_keys($this->availableDays);
         foreach ($years as $year) {
-            $this->log(sprintf('[%1$d] Year%1$d', $year));
+            $this->logger->log(sprintf('[%1$d] Year%1$d', $year));
         }
         $input = $this->getInput('>');
         if (is_numeric($input) && in_array(intval($input), $years)) {
             $this->selectedYear = (int)$input;
             $this->selectedDay = $this->availableDays[$year][0];
         } else {
-            $this->log(sprintf('Invalid year "%s"', $input));
+            $this->logger->log(sprintf('Invalid year "%s"', $input));
         }
 
         $this->showMenu();
@@ -210,30 +209,30 @@ class DayRunner
 
         chdir($this->home);
         if (is_readable($classFile) === false) {
-            $this->log(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
+            $this->logger->log(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
             $this->fatal($classFile);
         }
-        $this->log(sprintf('Loading file %s..', $classFile));
+        $this->logger->log(sprintf('Loading file %s..', $classFile));
 
         $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
-        $this->log(sprintf('Loading class %s..', $className));
-        $obj = new $className(new InputHelper(), $dataSet);
+        $this->logger->log(sprintf('Loading class %s..', $className));
+        $obj = new $className(new InputHelper(), $this->logger, $dataSet);
 
-        $this->log(sprintf('Running part%d with %s data!', $part, $dataSet));
-        $this->log(str_repeat('=', 30));
+        $this->logger->log(sprintf('Running part%d with %s data!', $part, $dataSet));
+        $this->logger->log(str_repeat('=', 30));
         $partFunc = sprintf('part%d', $part);
 
         $t = microtime(true);
         $obj->{$partFunc}();
         $runtime = microtime(true) - $t;
 
-        $this->log(str_repeat('=', 30));
+        $this->logger->log(str_repeat('=', 30));
         if ($runtime < 0.1) {
-            $this->log(sprintf('Runtime: %1$.3f us', 1_000_000 * $runtime));
+            $this->logger->log(sprintf('Runtime: %1$.3f us', 1_000_000 * $runtime));
         } elseif ($runtime < 1) {
-            $this->log(sprintf('Runtime: %1$.3f ms', 1_000 * $runtime));
+            $this->logger->log(sprintf('Runtime: %1$.3f ms', 1_000 * $runtime));
         } else {
-            $this->log(sprintf('Runtime: %1$.3f s', $runtime));
+            $this->logger->log(sprintf('Runtime: %1$.3f s', $runtime));
         }
     }
 

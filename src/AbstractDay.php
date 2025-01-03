@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace AdventOfCode;
 
 use AdventOfCode\Helpers\InputHelper;
-use AdventOfCode\Traits\LoggerTrait;
+use AdventOfCode\Helpers\Logger;
 
 abstract class AbstractDay
 {
-    use LoggerTrait;
-
     protected array $input;
     protected string $inputStr;
     protected bool $isLive;
@@ -20,6 +18,7 @@ abstract class AbstractDay
 
     public function __construct(
         InputHelper $inputHelper,
+        private readonly Logger $logger,
         string $dataSet
     ) {
         $this->input = $inputHelper->getInput($this, $dataSet, false);
@@ -34,5 +33,23 @@ abstract class AbstractDay
     public function part2(): void
     {
         die('Part2 is unfinished for this day!');
+    }
+
+    protected function debug(string $s): void
+    {
+        if ($this->isLive === false) {
+            $this->logger->log($s);
+        }
+    }
+
+    protected function log(string $s): void
+    {
+        $this->logger->log($s);
+    }
+
+    protected function fatal(string $s): void
+    {
+        $this->logger->log($s);
+        exit(1);
     }
 }

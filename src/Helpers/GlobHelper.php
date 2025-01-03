@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace AdventOfCode\Helpers;
 
-use AdventOfCode\Traits\LoggerTrait;
+use AdventOfCode\Helpers\Logger;
 
 class GlobHelper
 {
-    use LoggerTrait;
-
+    private Logger $logger;
     private string $home;
 
     public function __construct()
     {
+        $this->logger = new Logger();
         $this->home = dirname(__DIR__, 2);
     }
 
@@ -32,7 +32,7 @@ class GlobHelper
         if (is_dir($dir)) {
         chdir($dir);
         } else {
-            $this->fatal(sprintf('Cant chdir to %s', $dir));
+            $this->logger->fatal(sprintf('Cant chdir to %s', $dir));
         }
 
         $days = array_map(
