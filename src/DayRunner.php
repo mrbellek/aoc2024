@@ -32,7 +32,10 @@ class DayRunner
             $this->scanAvailableDays();
             $this->selectedYear = $this->getMostRecentYear();
             $this->selectedDay = $this->getMostRecentDay($this->selectedYear);
+
+            //@TODO automatically detect if part2 has been implemented via method or PARTx_COMPLETE cont
             $this->selectedPart = 2;
+
             $this->selectedEnv = self::ENV_TEST;
 
             $this->showMenu();

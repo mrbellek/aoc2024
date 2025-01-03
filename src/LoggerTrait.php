@@ -18,7 +18,7 @@ trait LoggerTrait
         }
     }
 
-    protected function fatal(strin $s): void
+    protected function fatal(string $s): void
     {
         $this->log($s);
         exit(1);
