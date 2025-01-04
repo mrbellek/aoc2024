@@ -15,8 +15,8 @@ class DayRunner
     private const YEAR_PREFIX = 'Year';
     private const DAY_PREFIX = 'Day';
 
-    private const ENV_TEST = 'test';
-    private const ENV_LIVE = 'live';
+    public const ENV_TEST = 'test';
+    public const ENV_LIVE = 'live';
 
     private string $home;
     private array $availableDays = [];

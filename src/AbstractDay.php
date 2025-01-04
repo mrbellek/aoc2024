@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AdventOfCode;
 
+use AdventOfCode\DayRunner;
 use AdventOfCode\Helpers\InputHelper;
 use AdventOfCode\Helpers\Logger;
 
@@ -21,6 +22,7 @@ abstract class AbstractDay
         private readonly Logger $logger,
         string $dataSet
     ) {
+        $this->isLive = $dataSet === DayRunner::ENV_LIVE;
         $this->input = $inputHelper->getInput($this, $dataSet, false);
         $this->inputStr = $inputHelper->getInput($this, $dataSet, true);
     }
@@ -38,7 +40,7 @@ abstract class AbstractDay
     protected function debug(string $s): void
     {
         if ($this->isLive === false) {
-            $this->logger->log($s);
+            $this->logger->debug($s);
         }
     }
 
@@ -49,7 +51,7 @@ abstract class AbstractDay
 
     protected function fatal(string $s): void
     {
-        $this->logger->log($s);
+        $this->logger->fatal($s);
         exit(1);
     }
 }

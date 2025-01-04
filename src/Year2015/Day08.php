@@ -34,11 +34,16 @@ class Day08 extends AbstractDay
 
     private function replaceLiterals(string $line): string
     {
+        //replace escaped characters
         $newline = preg_replace('/\\\x[0-9a-f]{2}/', 'x', $line);
+
+        //replace escaped quotes
         $newline = str_replace('\\"', '"', $newline);
+
+        //replace escaped backslashes
         $newline = str_replace('\\\\', '\\', $newline);
 
+        //remove bookend quotes
         return trim($newline, '"');
-//        return trim(str_replace('\\', '', $newline), '"');
     }
 }
