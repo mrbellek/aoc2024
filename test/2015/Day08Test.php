@@ -39,16 +39,41 @@ class Day08Test extends TestCase
         $object->part1();
     }
 
+    #[DataProvider('part2DataProvider')]
+    public function testPart2($expected, string $input): void
+    {
+        $this->inputHelper
+            ->expects($this->exactly(2))
+            ->method('getInput')
+            ->willReturnOnConsecutiveCalls([$input], $input);
+
+        $this->logger
+            ->expects($this->once())
+            ->method('log')
+            ->with($expected);
+
+        $object = new Day08($this->inputHelper, $this->logger, 'test');
+        $object->part2();
+    }
+
     static public function part1DataProvider(): array
     {
         return [
-            'No escape' => ['Total difference: 0', 'aaa'],
             'Bookend quotes' => ['Total difference: 2', '"aaa"'],
             'Bookend quotes and escaped quote' => ['Total difference: 3', '"aa\"aa"'],
             'Bookend quotes and escaped bslash' => ['Total difference: 3', '"aa\\\\aa"'],
             'Bookend quotes and 2 escaped bslash' => ['Total difference: 4', '"aa\\\\\\\\aa"'],
             'Bookend quotes, escaped bslash and loose bslash' => ['Total difference: 3', '"aa\\\\\aa"'],
             'Bookend quotes, escaped quote and loose quote' => ['Total difference: 3', '"aa\""aa"'],
+            'Escaped character' => ['Total difference: 5', '"aa\x3a"'],
+            'Invalid escaped character' => ['Total difference: 2', '"aa\xzza"'],
+        ];
+    }
+
+    static public function part2DataProvider(): array
+    {
+        return [
+
         ];
     }
 }
