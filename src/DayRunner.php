@@ -274,7 +274,7 @@ class DayRunner
         ksort($completedDays);
         $years = array_keys($completedDays);
         print '       | ' . implode(' | ', $years) . ' |' . PHP_EOL;
-        print str_repeat('-', 7) . '+';
+        print '-------+';
         print str_repeat('------+', count($years)) . PHP_EOL;
         for ($i = 1; $i <= 25; $i++) {
             $day = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
@@ -284,6 +284,18 @@ class DayRunner
                 echo '|  ';
             }
             echo PHP_EOL;
+        }
+        print '-------+';
+        print str_repeat('------+', count($years)) . PHP_EOL;
+        print 'Total  | ';
+
+        foreach ($completedDays as $year => $days) {
+            $starCount = substr_count(implode('', $days), '*');
+            if ($starCount === 50) {
+                print '100% | ';
+            } else {
+                print floor($starCount * 100 / 50) . '%  | ';
+            }
         }
     }
 }
