@@ -31,10 +31,11 @@ class DayRunner
         array $argv
     ) {
         $this->home = (string)getcwd();
+        $this->scanAvailableDays();
+
         if (count($argv) > 1) {
             $this->parseArguments($argv);
         } else {
-            $this->scanAvailableDays();
             $this->selectedYear = $this->getMostRecentYear();
             $this->selectedDay = $this->getMostRecentDay($this->selectedYear);
 
@@ -97,12 +98,16 @@ class DayRunner
 
     private function parseArguments(array $argv): void
     {
-        $year = $argv[1] ?? (int)date('Y');
-        $day = $argv[2] ?? '01';
-        $part = $argv[3] ?? 1;
-        $dataSet = $argv[4] ?? 'test';
+        if (is_numeric($argv[1])) {
+            $year = $argv[1] ?? (int)date('Y');
+            $day = $argv[2] ?? '01';
+            $part = $argv[3] ?? 1;
+            $dataSet = $argv[4] ?? 'test';
 
-        $this->runDay((int)$year, $day, (int)$part, $dataSet);
+            $this->runDay((int)$year, $day, (int)$part, $dataSet);
+        } elseif ($argv[1] === 'r') {
+            $this->createCompletionReport();
+        }
     }
 
     private function scanAvailableDays(): void
@@ -247,6 +252,10 @@ class DayRunner
 
     private function createCompletionReport(): void
     {
+        if (count($this->availableDays) === 0) {
+            printf('No year folders found in %s', $this->home . '/src' . PHP_EOL);
+            exit(1);
+        }
         $completedDays = [];
 
         chdir($this->home);
@@ -254,14 +263,13 @@ class DayRunner
             $completedDays[$year] = [];
             sort($days);
             foreach ($days as $day) {
-                $completedDays[$year][$day] = '.';
-                $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
+                $completedDays[$year][$day] = ':construction_worker:';
                 $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
                 if ($className::PART1_COMPLETE) {
-                    $completedDays[$year][$day] = '*';
+                    $completedDays[$year][$day] = ':star:';
                 }
                 if ($className::PART2_COMPLETE) {
-                    $completedDays[$year][$day] = '**';
+                    $completedDays[$year][$day] = ':star::star:';
                 }
             }
         }
@@ -273,28 +281,26 @@ class DayRunner
     {
         ksort($completedDays);
         $years = array_keys($completedDays);
-        print '       | ' . implode(' | ', $years) . ' |' . PHP_EOL;
-        print '-------+';
-        print str_repeat('------+', count($years)) . PHP_EOL;
+        print '|       | ' . implode(' | ', $years) . ' |' . PHP_EOL;
+        print '| :---  |';
+        print str_repeat(' :--: |', count($years)) . PHP_EOL;
         for ($i = 1; $i <= 25; $i++) {
             $day = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
-            printf('Day %s |  ', $day);
+            printf('|Day %s | ', $day);
             foreach ($years as $year) {
                 print str_pad($completedDays[$year][$day] ?? '', 4, ' ', STR_PAD_RIGHT);
-                echo '|  ';
+                echo '| ';
             }
             echo PHP_EOL;
         }
-        print '-------+';
-        print str_repeat('------+', count($years)) . PHP_EOL;
-        print 'Total  | ';
+        print '|**Total**  | ';
 
         foreach ($completedDays as $year => $days) {
-            $starCount = substr_count(implode('', $days), '*');
+            $starCount = substr_count(implode('', $days), ':star:');
             if ($starCount === 50) {
-                print '100% | ';
+                print '**100%** | ';
             } else {
-                print floor($starCount * 100 / 50) . '%  | ';
+                print '**' . floor($starCount * 100 / 50) . '%** | ';
             }
         }
     }
