@@ -10,7 +10,7 @@
 |Day 08 | :star::star:| :star::star:| :star:|
 |Day 09 | :star::star:| :star::star:| :construction_worker:|
 |Day 10 | :star::star:|     | :construction_worker:|
-|Day 11 |     |     | :star::star:|
+|Day 11 | :star::star:|     | :star::star:|
 |Day 12 |     |     | :construction_worker:|
 |Day 13 |     |     | :star::star:|
 |Day 14 |     |     | :star::star:|
@@ -25,4 +25,4 @@
 |Day 23 |     |     | :star:|
 |Day 24 |     |     |     |
 |Day 25 |     |     | :star:|
-|**Total**  | **32%** | **22%** | **44%** |
+|**Total**  | **36%** | **22%** | **44%** |
