@@ -8,6 +8,11 @@ use AdventOfCode\AbstractDay;
 
 class InputHelper
 {
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
+
     public function getInput(AbstractDay $class, string $dataSet, bool $raw): array|string
     {
         [$year, $day] = $this->getClassYearAndDay($class);
@@ -22,11 +27,13 @@ class InputHelper
                 $inputFile = sprintf('./data/%1$d/input%2$02d.txt', $year, $day);
                 break;
             default:
-                $this->fatal(sprintf('Invalid environment "%s"', $dataSet));
+                $this->logger->fatal(sprintf('Invalid environment "%s"', $dataSet));
+                exit(1);
         }
 
         if (!is_readable($inputFile)) {
-            $this->fatal(sprintf('FATAL: Cannot find input file %s!', $inputFile));
+            $this->logger->fatal(sprintf('FATAL: Cannot find input file %s!', $inputFile));
+            exit(1);
         }
 
 
