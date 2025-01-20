@@ -20,11 +20,11 @@ class Day12 extends AbstractDay
 
     public function part2(): void
     {
-        $sum = $this->recursiveSum(json_decode($this->input[0]));
+        $sum = $this->recursiveSum(json_decode($this->input[0], false, 512, JSON_THROW_ON_ERROR));
         $this->log(sprintf('Sum of non-red numbers is %d', $sum));
     }
 
-    private function recursiveSum(object|array $input): int
+    private function recursiveSum(object $input): int
     {
         $sum = 0;
         foreach (get_object_vars($input) as $prop) {
@@ -34,10 +34,8 @@ class Day12 extends AbstractDay
                 }
             } elseif (is_array($prop)) {
                 $sum += $this->recursiveSumArray($prop);
-            } else {
-                if (is_numeric($prop)) {
-                    $sum += intval($prop);
-                }
+            } elseif (is_numeric($prop)) {
+                $sum += (int) $prop;
             }
         }
 
@@ -52,10 +50,8 @@ class Day12 extends AbstractDay
                 $sum += $this->recursiveSum($el);
             } elseif (is_array($el)) {
                 $sum += $this->recursiveSumArray($el);
-            } else {
-                if (is_numeric($el)) {
-                    $sum += intval($el);
-                }
+            } elseif (is_numeric($el)) {
+                $sum += (int) $el;
             }
         }
 
@@ -64,13 +60,7 @@ class Day12 extends AbstractDay
 
     private function isRed(object $input): bool
     {
-        print_r($input);
-        foreach (get_object_vars($input) as $var) {
-            if (is_string($var) && $var === 'red') {
-                return true;
-            }
-        }
-
-        return false;
+        //print_r($input);
+        return in_array('red', get_object_vars($input), true);
     }
 }
