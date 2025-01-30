@@ -25,6 +25,11 @@ class DayRunner
     private int $selectedPart;
     private string $selectedEnv;
 
+    //Markdown thingies
+    private string $star;
+    private string $inProgress;
+    private string $bold;
+
     public function __construct(
         private readonly GlobHelper $globHelper,
         private readonly Logger $logger,
@@ -106,6 +111,15 @@ class DayRunner
 
             $this->runDay((int)$year, $day, (int)$part, $dataSet);
         } elseif ($argv[1] === 'r') {
+            if ($argv[2] === 'md') {
+                $this->star = ':star:';
+                $this->inProgress = ':construction_worker:';
+                $this->bold = '**';
+            } else {
+                $this->star = '*';
+                $this->inProgress = '.';
+                $this->bold = '';
+            }
             $this->createCompletionReport();
         }
     }
@@ -263,13 +277,13 @@ class DayRunner
             $completedDays[$year] = [];
             sort($days);
             foreach ($days as $day) {
-                $completedDays[$year][$day] = ':construction_worker:';
+                $completedDays[$year][$day] = $this->inProgress;
                 $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
                 if ($className::PART1_COMPLETE) {
-                    $completedDays[$year][$day] = ':star:';
+                    $completedDays[$year][$day] = $this->star;
                 }
                 if ($className::PART2_COMPLETE) {
-                    $completedDays[$year][$day] = ':star::star:';
+                    $completedDays[$year][$day] = $this->star . $this->star;
                 }
             }
         }
@@ -286,21 +300,21 @@ class DayRunner
         print str_repeat(' :--: |', count($years)) . PHP_EOL;
         for ($i = 1; $i <= 25; $i++) {
             $day = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
-            printf('|Day %s | ', $day);
+            printf('|Day %s |  ', $day);
             foreach ($years as $year) {
                 print str_pad($completedDays[$year][$day] ?? '', 4, ' ', STR_PAD_RIGHT);
-                echo '| ';
+                echo '|  ';
             }
             echo PHP_EOL;
         }
-        print '|**Total**  | ';
+        print '|' . $this->bold . 'Total' . $this->bold . '  | ';
 
         foreach ($completedDays as $year => $days) {
-            $starCount = substr_count(implode('', $days), ':star:');
+            $starCount = substr_count(implode('', $days), $this->star);
             if ($starCount === 50) {
-                print '**100%** | ';
+                print $this->bold . '100%' . $this->bold . ' | ';
             } else {
-                print '**' . floor($starCount * 100 / 50) . '%** | ';
+                print $this->bold . floor($starCount * 100 / 50) . '%' . $this->bold . '  | ';
             }
         }
         echo PHP_EOL;
