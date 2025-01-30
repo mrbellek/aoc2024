@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AdventOfCode\Year2015;
 
-use  AdventOfCode\AbstractDay;
+use AdventOfCode\AbstractDay;
 
 class Day11 extends AbstractDay
 {

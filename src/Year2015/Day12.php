@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace AdventOfCode\Year2015;
 
-use  AdventOfCode\AbstractDay;
+use AdventOfCode\AbstractDay;
 
 class Day12 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
-//    public const PART2_COMPLETE = true;
+    public const PART2_COMPLETE = false;
 
     public function part1(): void
     {
