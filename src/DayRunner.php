@@ -303,5 +303,6 @@ class DayRunner
                 print '**' . floor($starCount * 100 / 50) . '%** | ';
             }
         }
+        echo PHP_EOL;
     }
 }
