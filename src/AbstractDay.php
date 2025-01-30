@@ -54,4 +54,10 @@ abstract class AbstractDay
         $this->logger->fatal($s);
         exit(1);
     }
+
+    protected function dd(mixed $input): never
+    {
+        var_dump($input);
+        exit(1);
+    }
 }
