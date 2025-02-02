@@ -9,6 +9,7 @@ use AdventOfCode\AbstractDay;
 class Day14 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
 
     private array $reindeer = [];
 
@@ -45,17 +46,48 @@ class Day14 extends AbstractDay
         ));
     }
 
-    private function getReindeerDistance(string $name, int $raceTime): float
+    public function part2(): void
+    {
+        $this->parseInput();
+        if ($this->isLive) {
+            $raceTime = 2503;
+        } else {
+            $raceTime = 1000;
+        }
+
+        $scoreTally = [];
+        $distanceThisSecond = [];
+        for ($i = 1; $i <= $raceTime; $i++) {
+            foreach ($this->reindeer as $name => $reindeer) {
+                $distanceThisSecond[$name] = $this->getReindeerDistanceOnSecond($name, $i);
+            }
+            $leadReindeer = array_keys($distanceThisSecond, max($distanceThisSecond));
+            foreach ($leadReindeer as $leadName) {
+                if (!isset($scoreTally[$leadName])) {
+                    $scoreTally[$leadName] = 0;
+                }
+                $scoreTally[$leadName]++;
+            }
+        }
+
+        asort($scoreTally);
+        $this->log('Final tally:');
+        foreach ($scoreTally as $name => $tally) {
+            $this->log(sprintf('%s: %d points', $name, $tally));
+        }
+    }
+
+    private function getReindeerDistanceOnSecond(string $name, int $second): int
+    {
+        return $this->getReindeerDistance($name, $second);
+    }
+
+    private function getReindeerDistance(string $name, int $raceTime): int
     {
         $reindeer = $this->reindeer[$name];
         $cycleTime = $reindeer['fly_time'] + $reindeer['rest_time'];
-        $fullCycles = floor($raceTime / $cycleTime);
+        $fullCycles = intval(floor($raceTime / $cycleTime));
         $remainingTime = $raceTime % $cycleTime;
-
-        $this->log(sprintf(
-            '%s can fly %d full cycles in %d seconds, after which %d seconds are left.',
-            $name, $fullCycles, $raceTime, $remainingTime
-        ));
 
         if ($reindeer['fly_time'] < $remainingTime) {
             //remaining time is larger than fly time, but smaller than fly+rest time.
