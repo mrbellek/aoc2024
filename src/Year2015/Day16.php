@@ -9,6 +9,7 @@ use AdventOfCode\AbstractDay;
 class Day16 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
 
     private array $sues;
 
@@ -32,6 +33,28 @@ class Day16 extends AbstractDay
             'perf' => 1,
         ]);
         $this->log(sprintf('Your present was sent to you by Sue %d', $sueId));
+    }
+
+    public function part2(): void
+    {
+        if ($this->isLive === false) {
+            $this->fatal('This assignment has no sample input.');
+        }
+
+        $this->parseSues();
+        $sueId = $this->findSueBetter([
+            'kids' => 3,
+            'cats' => 7,
+            'samo' => 2,
+            'poms' => 3,
+            'akit' => 0,
+            'vizs' => 0,
+            'fish' => 5,
+            'tree' => 3,
+            'cars' => 2,
+            'perf' => 1,
+        ]);
+        $this->log(sprintf('Your present was actually sent to you by Sue %d', $sueId));
     }
 
     private function parseSues(): void
@@ -86,8 +109,39 @@ class Day16 extends AbstractDay
        throw new \RuntimeException('ZOMG SUE NOT FOUND');
     }
 
+    private function findSueBetter(array $params): int
+    {
+        foreach ($this->sues as $id => $sue) {
+            if ($this->sortaEquals($sue['kids'], $params['kids']) &&
+                $this->sortaHigher($sue['cats'], $params['cats']) &&
+                $this->sortaEquals($sue['samo'], $params['samo']) &&
+                $this->sortaLower($sue['poms'], $params['poms']) &&
+                $this->sortaEquals($sue['akit'], $params['akit']) &&
+                $this->sortaEquals($sue['vizs'], $params['vizs']) &&
+                $this->sortaLower($sue['fish'], $params['fish']) &&
+                $this->sortaHigher($sue['tree'], $params['tree']) &&
+                $this->sortaEquals($sue['cars'], $params['cars']) &&
+                $this->sortaEquals($sue['perf'], $params['perf'])
+            ) {
+                return $id;
+            }
+        }
+
+        throw new \RuntimeException('ZOMG SUE STILl NOT FOUND');
+    }
+
     private function sortaEquals(?int $val1, int $val2): bool
     {
         return $val1 === null || $val1 === $val2;
+    }
+
+    private function sortaHigher(?int $val1, int $val2): bool
+    {
+        return $val1 === null || $val1 > $val2;
+    }
+
+    private function sortaLower(?int $val1, int $val2): bool
+    {
+        return $val1 === null || $val1 < $val2;
     }
 }
