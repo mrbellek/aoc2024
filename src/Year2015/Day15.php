@@ -9,6 +9,7 @@ use AdventOfCode\AbstractDay;
 class Day15 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
+    public const PART2_COMPLETE = true;
 
     private array $ingredients;
 
@@ -29,7 +30,7 @@ class Day15 extends AbstractDay
             for ($j = 1; $j < 100; $j++) {
                 for ($k = 1; $k < 100; $k++) {
                     for ($l = 1; $l < 100; $l++) {
-                        if ($i + $j + $k + $l > 100) {
+                        if ($i + $j + $k + $l !== 100) {
                             continue;
                         }
 
@@ -73,7 +74,7 @@ class Day15 extends AbstractDay
             for ($j = 1; $j < 100; $j++) {
                 for ($k = 1; $k < 100; $k++) {
                     for ($l = 1; $l < 100; $l++) {
-                        if ($i + $j + $k + $l > 100) {
+                        if ($i + $j + $k + $l !== 100) {
                             continue;
                         }
 
@@ -150,7 +151,7 @@ class Day15 extends AbstractDay
         $scoreTex = $i * $spr['texture']     + $j * $but['texture']     + $k * $cho['texture']     + $l * $can['texture'];
         $scoreCal = $i * $spr['calories']    + $j * $but['calories']    + $k * $cho['calories']    + $l * $can['calories'];
 
-        if ($scoreCap < 0 || $scoreDur < 0 || $scoreFla < 0 || $scoreTex < 0 || $scoreCal !== 500) {
+        if ($scoreCap <= 0 || $scoreDur <= 0 || $scoreFla <= 0 || $scoreTex <= 0 || $scoreCal !== 500) {
             return 0;
         }
 
