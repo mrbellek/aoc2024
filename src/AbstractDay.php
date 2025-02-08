@@ -55,7 +55,7 @@ abstract class AbstractDay
         exit(1);
     }
 
-    protected function dd(mixed $input1, mixed $input2): never
+    protected function dd(mixed $input1, mixed $input2 = null): never
     {
         var_dump($input1, $input2);
         exit(1);
