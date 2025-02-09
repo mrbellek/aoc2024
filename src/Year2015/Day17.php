@@ -28,9 +28,9 @@ class Day17 extends AbstractDay
         foreach ($this->getPermutations($this->containers) as $containers) {
             $num = $this->fitsNumContainersExactly($containers);
             if ($num > 0) {
-                $containerSet = array_column(array_slice($containers, 0, $num), 'volume');
+                $containerSet = array_slice($containers, 0, $num, true);
                 sort($containerSet);
-                $containerSets[] = implode(',', $containerSet);
+                $containerSets[] = $containerSet;
             }
         }
 
