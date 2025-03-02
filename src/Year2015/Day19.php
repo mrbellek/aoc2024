@@ -8,6 +8,8 @@ use AdventOfCode\AbstractDay;
 
 class Day19 extends AbstractDay
 {
+    public const PART1_COMPLETE = true;
+
     private array $replacements;
 
     public function part1(): void
@@ -43,19 +45,22 @@ class Day19 extends AbstractDay
     {
         $results = [];
         foreach ($this->replacements as $replacement) {
-            for ($i = 0; $i < strlen($startMol); $i++) {
-                //convert molecule from string to array, or php will only
-                //replace the first byte of the result
-                //@TODO this doesnt account for 'from' entries that are longer than one character!
-                $result = str_split($startMol);
-                $result[$i] = str_replace($replacement['from'], $replacement['to'], $startMol[$i]);
-                if (implode('', $result) !== $startMol) {
-                    $results[] = implode('', $result);
+            $offset = 0;
+            while ($offset < strlen($startMol)) {
+                $newOffset = strpos($startMol, $replacement['from'], $offset);
+                if ($newOffset === false) {
+                    break;
                 }
+                $results[] =
+                    substr($startMol, 0, $newOffset) .
+                    $replacement['to'] .
+                    substr($startMol, $newOffset + strlen($replacement['from']))
+                ;
+                $offset = $newOffset + strlen($replacement['from']);
             }
         }
 
-        $this->log(sprintf('%d nonunique results', count($results)));
+        $this->debug(sprintf('Found %d nonunique molecules', count($results)));
         return array_unique($results);
     }
 }
