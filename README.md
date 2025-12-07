@@ -1,4 +1,4 @@
-|       | 2015 | 2023 | 2024 | 225
+|       | 2015 | 2023 | 2024 | 2025
 | :---  | :--: | :--: | :--: | :--:
 |Day 01 |  :star::star:|  :star::star:|  :star::star:|  :star::star:|
 |Day 02 |  :star::star:|  :star::star:|  :star::star:|  :star::star:|
@@ -10,19 +10,19 @@
 |Day 08 |  :star::star:|  :star::star:|  :star:|      |
 |Day 09 |  :star::star:|  :star::star:|  :construction_worker:|      |
 |Day 10 |  :star::star:|      |  :construction_worker:|      |
-|Day 11 |  :star::star:|      |  :star::star:|      |
-|Day 12 |  :star:|      |  :construction_worker:|      |
-|Day 13 |  :star::star:|      |  :star::star:|
-|Day 14 |  :star::star:|      |  :star::star:|
-|Day 15 |      |      |  :construction_worker:|
-|Day 16 |      |      |      |
-|Day 17 |      |      |      |
-|Day 18 |      |      |      |
-|Day 19 |      |      |  :construction_worker:|
-|Day 20 |      |      |      |
-|Day 21 |      |      |      |
-|Day 22 |      |      |  :star:|
-|Day 23 |      |      |  :star:|
-|Day 24 |      |      |      |
-|Day 25 |      |      |  :star:|
-|**Total**  | **46%**  | **22%**  | **44%**  |
+|Day 11 |  :star::star:|      |  :star::star:|   x  |
+|Day 12 |  :star:|      |  :construction_worker:|   x  |
+|Day 13 |  :star::star:|      |  :star::star:|   x  |
+|Day 14 |  :star::star:|      |  :star::star:|   x  |
+|Day 15 |      |      |  :construction_worker:|   x  |
+|Day 16 |      |      |      |   x  |
+|Day 17 |      |      |      |   x  |
+|Day 18 |      |      |      |   x  |
+|Day 19 |      |      |  :construction_worker:|   x  |
+|Day 20 |      |      |      |   x  |
+|Day 21 |      |      |      |   x  |
+|Day 22 |      |      |  :star:|   x  |
+|Day 23 |      |      |  :star:|   x  |
+|Day 24 |      |      |      |   x  |
+|Day 25 |      |      |  :star:|   x  |
+|**Total**  | **46%**  | **22%**  | **44%**  |      |
