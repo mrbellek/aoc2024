@@ -10,8 +10,8 @@
 |Day 08 |  :star::star:|  :star::star:|  :star:|      |
 |Day 09 |  :star::star:|  :star::star:|  :construction_worker:|      |
 |Day 10 |  :star::star:|      |  :construction_worker:|      |
-|Day 11 |  :star::star:|      |  :star::star:|   x  |
-|Day 12 |  :star:|      |  :construction_worker:|   x  |
+|Day 11 |  :star::star:|      |  :star::star:|      |
+|Day 12 |  :star:|      |  :construction_worker:|      |
 |Day 13 |  :star::star:|      |  :star::star:|   x  |
 |Day 14 |  :star::star:|      |  :star::star:|   x  |
 |Day 15 |      |      |  :construction_worker:|   x  |
