@@ -70,24 +70,22 @@ class Day01 extends AbstractDay
         $amount = (int)substr($action, 1);
         $zeroPasses = 0;
 
-        if ($direction === 'L') {
-            $this->position -= $amount;
-            while ($this->position < 0) {
-                $zeroPasses++;
-                $this->position += 100;
+        for ($i = 0; $i < $amount; $i++) {
+            if ($direction === 'L') {
+                $this->position--;
+                if ($this->position < 0) {
+                    $this->position = 99;
+                }
+            } elseif ($direction === 'R') {
+                $this->position++;
+                if ($this->position >= 100) {
+                    $this->position = 0;
+                }
             }
-        } elseif ($direction === 'R') {
-            $this->position += $amount;
-            while ($this->position >= 100) {
-                $zeroPasses++;
-                $this->position -= 100;
-            }
-        } else {
-            throw new InvalidArgumentException('Invalid input: "' . $action . '"');
-        }
 
-        if ($this->position === 0) {
-            $zeroPasses++;
+            if ($this->position === 0) {
+                $zeroPasses++;
+            }
         }
 
         $this->debug(sprintf('Rotated the lock %s %d spaces to position %d, passed zero %d times', $direction, $amount, $this->position, $zeroPasses));
