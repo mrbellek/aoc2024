@@ -10,7 +10,7 @@ use InvalidArgumentException;
 class Day01 extends AbstractDay
 {
     public const PART1_COMPLETE = true;
-    public const PART2_COMPLETE = false;
+    public const PART2_COMPLETE = true;
 
     private int $position = 50;
 
