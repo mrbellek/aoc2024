@@ -26,9 +26,9 @@ class DayRunner
     private string $selectedEnv;
 
     //Markdown thingies
-    private string $star;
-    private string $inProgress;
-    private string $bold;
+    private string $star = '*';
+    private string $inProgress = '.';
+    private string $bold = '';
 
     public function __construct(
         private readonly GlobHelper $globHelper,
@@ -115,10 +115,6 @@ class DayRunner
                 $this->star = ':star:';
                 $this->inProgress = ':construction_worker:';
                 $this->bold = '**';
-            } else {
-                $this->star = '*';
-                $this->inProgress = '.';
-                $this->bold = '';
             }
             $this->createCompletionReport();
         }
