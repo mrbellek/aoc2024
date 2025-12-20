@@ -29,7 +29,7 @@ abstract class AbstractDay
 
     public function part1(): void
     {
-        die('Part1 is unfinished for this day!');
+        die('Part1 is unfinished for this day!' . PHP_EOL);
     }
 
     public function part2(): void

@@ -44,8 +44,9 @@ class DayRunner
             $this->selectedYear = $this->getMostRecentYear();
             $this->selectedDay = $this->getMostRecentDay($this->selectedYear);
 
-            //@TODO automatically detect if part2 has been implemented via method or PARTx_COMPLETE cont
-            $this->selectedPart = 2;
+            //TODO fix, this is broken
+            $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $this->selectedYear, $this->selectedDay);
+            $this->selectedPart = $className::PART1_COMPLETE ? 2 : 1;
 
             $this->selectedEnv = self::ENV_TEST;
 
@@ -103,6 +104,13 @@ class DayRunner
 
     private function parseArguments(array $argv): void
     {
+        /**
+         * CLI arguments accepted:
+         * runday.php [year] [day] [part] [test|live] - run specified part (default env is test, i.e. sample input)
+         *    e.g. runday.php 2015 08 1 live - run part 1 of the day 8 problem from AoC 2015 with live puzzle input
+         * runday.php r - generate plaintext completion report
+         * rundat.php r md - generate markdown completionreport for github readme
+         */
         if (is_numeric($argv[1])) {
             $year = $argv[1] ?? (int)date('Y');
             $day = $argv[2] ?? '01';
@@ -150,8 +158,8 @@ class DayRunner
             strtoupper($this->selectedEnv === self::ENV_TEST ? self::ENV_LIVE : self::ENV_TEST)
         ));
         $this->logger->log(sprintf('[2] Change part to %d', $this->selectedPart === 1 ? 2 : 1));
-        $this->logger->log('[3] Change day ->');
-        $this->logger->log('[4] Change year ->');
+        $this->logger->log('[3] Change day...');
+        $this->logger->log('[4] Change year...');
         $this->logger->log('[r] Completion report');
         $this->logger->log('[x] Exit');
     }
@@ -255,7 +263,7 @@ class DayRunner
     private function getInput(string $prompt): string
     {
         echo $prompt;
-        $userInput = fgets(fopen('php://stdin', 'r')) ?: '';
+        $userInput = fgets(fopen('php://stdin', 'rb')) ?: '';
 
         return rtrim($userInput);
     }
@@ -306,11 +314,12 @@ class DayRunner
         print '|' . $this->bold . 'Total' . $this->bold . '  | ';
 
         foreach ($completedDays as $year => $days) {
+            $maxStarCount = $year >= 2025 ? 24 : 50;
             $starCount = substr_count(implode('', $days), $this->star);
-            if ($starCount === 50) {
+            if ($starCount === $maxStarCount) {
                 print $this->bold . '100%' . $this->bold . ' | ';
             } else {
-                print $this->bold . floor($starCount * 100 / 50) . '%' . $this->bold . '  | ';
+                print $this->bold . floor($starCount * 100 / $maxStarCount) . '%' . $this->bold . '  | ';
             }
         }
         echo PHP_EOL;
