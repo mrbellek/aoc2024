@@ -26,4 +26,11 @@ trait MatrixTrait
             $this->matrix[$y] = str_split($line);
         }
     }
+
+    public function printMatrix(): void
+    {
+        foreach ($this->matrix as $line) {
+            echo implode('', $line) . PHP_EOL;
+        }
+    }
 }
