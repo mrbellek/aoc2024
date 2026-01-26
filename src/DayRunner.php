@@ -7,13 +7,12 @@ namespace AdventOfCode;
 use AdventOfCode\Helpers\GlobHelper;
 use AdventOfCode\Helpers\InputHelper;
 use AdventOfCode\Helpers\Logger;
-
 use function sprintf;
 
 class DayRunner
 {
-    private const YEAR_PREFIX = 'Year';
-    private const DAY_PREFIX = 'Day';
+    private string $yearPrefix;
+    private string $dayPrefix;
 
     public const ENV_TEST = 'test';
     public const ENV_LIVE = 'live';
@@ -32,10 +31,22 @@ class DayRunner
 
     public function __construct(
         private readonly GlobHelper $globHelper,
-        private readonly Logger $logger,
-        array $argv
-    ) {
+        private readonly Logger     $logger,
+        private readonly string     $campaign = 'aoc',
+        array                       $argv
+    )
+    {
         $this->home = (string)getcwd();
+
+        $this->yearPrefix = match ($this->campaign) {
+            'aoc' => 'Year',    //Advent of Code
+            'ec' => 'EC',       //Everybody Codes
+        };
+        $this->dayPrefix = match ($this->campaign) {
+            'aoc' => 'Day',
+            'ec' => 'Quest',
+        };
+
         $this->scanAvailableDays();
 
         if (count($argv) > 1) {
@@ -45,7 +56,7 @@ class DayRunner
             $this->selectedDay = $this->getMostRecentDay($this->selectedYear);
 
             //TODO fix, this is broken
-            $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $this->selectedYear, $this->selectedDay);
+            $className = sprintf('AdventOfCode\%1$s%2$d\\Day%3$02d', $this->yearPrefix, $this->selectedYear, $this->selectedDay);
             $this->selectedPart = $className::PART1_COMPLETE ? 2 : 1;
 
             $this->selectedEnv = self::ENV_TEST;
@@ -132,9 +143,9 @@ class DayRunner
     {
         $years = $this->globHelper->getYears();
         foreach ($years as $yearStr) {
-            $year = (int)str_replace(self::YEAR_PREFIX, '', $yearStr);
+            $year = (int)str_replace($this->yearPrefix, '', $yearStr);
             $this->availableDays[$year] = array_map(
-                static fn(string $day) => str_replace(self::DAY_PREFIX, '', $day),
+                fn(string $day) => str_replace($this->dayPrefix, '', $day),
                 $this->globHelper->getDays($year)
             );
         }
@@ -228,19 +239,20 @@ class DayRunner
 
     private function runDay(int $year, string $day, int $part, string $dataSet): void
     {
-        $classFile = sprintf('%1$s/src/Year%2$d/Day%3$02d.php', $this->home, $year, $day);
+        $classFile = sprintf('%1$s/src/%2$s%3$d/%4$s%5$02d.php', $this->home, $this->yearPrefix, $year, $this->dayPrefix, $day);
 
         chdir($this->home);
         if (is_readable($classFile) === false) {
-            $this->logger->fatal(sprintf('FATAL: Cannot find class file for Year%d/Day%s!', $year, $day));
+            // e.g. Cannot find class file for Year2015/Day12!
+            $this->logger->fatal(sprintf('FATAL: Cannot find class file for %s%d/%s%s!', $this->yearPrefix, $year, $this->dayPrefix, $day));
             $this->logger->fatal($classFile);
             exit(1);
         }
         $this->logger->log(sprintf('Loading file %s..', $classFile));
 
-        $className = sprintf('AdventOfCode\Year%1$d\\Day%2$02d', $year, $day);
+        $className = sprintf('AdventOfCode\%1$s%2$d\\%3$s%4$02d', $this->yearPrefix, $year, $this->dayPrefix, $day);
         $this->logger->log(sprintf('Loading class %s..', $className));
-        $obj = new $className(new InputHelper(), $this->logger, $dataSet);
+        $obj = new $className(new InputHelper($this->campaign), $this->logger, $dataSet, $part);
 
         $this->logger->log(sprintf('Running part%d with %s data!', $part, $dataSet));
         $this->logger->log(str_repeat('=', 30));

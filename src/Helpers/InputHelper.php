@@ -8,23 +8,45 @@ use AdventOfCode\AbstractDay;
 
 class InputHelper
 {
-    public function __construct()
+    private Logger $logger;
+    private string $prefix;
+    private string $yearPrefix;
+    private string $dayPrefix;
+    private string $partPrefix;
+
+    public function __construct(string $campaign)
     {
         $this->logger = new Logger();
+        $this->yearPrefix = match($campaign) {
+            'aoc' => 'Year',
+            'ec' => 'EC',
+        };
+        $this->dayPrefix = match($campaign) {
+            'aoc' => '',
+            'ec' => 'Quest',
+        };
+        $this->prefix = match($campaign) {
+            'aoc' => '',
+            'ec' => 'ec',
+        };
+        $this->partPrefix = match($campaign) {
+            'aoc' => '',
+            'ec' => '-',
+        };
     }
 
-    public function getInput(AbstractDay $class, string $dataSet, bool $raw): array|string
+    public function getInput(AbstractDay $class, string $dataSet, int $part, bool $raw): array|string
     {
         [$year, $day] = $this->getClassYearAndDay($class);
 
+        $partPrefix = $this->partPrefix === '' ? '' : $this->partPrefix . $part;
+
         switch ($dataSet) {
             case 'test':
-                $this->isLive = false;
-                $inputFile = sprintf('./data/%1$d/sample%2$02d.txt', $year, $day);
+                $inputFile = sprintf('./data/%1$s%2$d/sample%3$02d%4$s.txt', $this->prefix, $year, $day, $partPrefix);
                 break;
             case 'live':
-                $this->isLive = true;
-                $inputFile = sprintf('./data/%1$d/input%2$02d.txt', $year, $day);
+                $inputFile = sprintf('./data/%1$s%2$d/input%3$02d%4$s.txt', $this->prefix, $year, $day, $partPrefix);
                 break;
             default:
                 $this->logger->fatal(sprintf('Invalid environment "%s"', $dataSet));
@@ -46,7 +68,7 @@ class InputHelper
         $year = (int) date('Y');
         $day = 1;
         $matches = [];
-        if (preg_match('/Year(\d+)\\\Day(\d+)/', $className, $matches) === 1) {
+        if (preg_match('/' . $this->yearPrefix . '(\d+)\\\\' . $this->dayPrefix . '(\d+)/', $className, $matches) === 1) {
             $year = $matches[1];
             $day = $matches[2];
         }

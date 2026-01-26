@@ -20,11 +20,12 @@ abstract class AbstractDay
     public function __construct(
         InputHelper $inputHelper,
         private readonly Logger $logger,
-        string $dataSet
+        string $dataSet,
+        ?int $part = 1,
     ) {
         $this->isLive = $dataSet === DayRunner::ENV_LIVE;
-        $this->input = $inputHelper->getInput($this, $dataSet, false);
-        $this->inputStr = $inputHelper->getInput($this, $dataSet, true);
+        $this->input = $inputHelper->getInput($this, $dataSet, $part, false);
+        $this->inputStr = $inputHelper->getInput($this, $dataSet, $part, true);
     }
 
     public function part1(): void

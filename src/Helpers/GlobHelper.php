@@ -10,17 +10,27 @@ class GlobHelper
 {
     private Logger $logger;
     private string $home;
+    private string $yearPrefix;
+    private string $dayPrefix;
 
-    public function __construct()
+    public function __construct(string $campaign)
     {
         $this->logger = new Logger();
         $this->home = dirname(__DIR__, 2);
+        $this->yearPrefix = match($campaign) {
+            'aoc' => 'Year',
+            'ec' => 'EC',
+        };
+        $this->dayPrefix = match($campaign) {
+            'aoc' => 'Day',
+            'ec' => 'Quest',
+        };
     }
 
     public function getYears(): array
     {
         chdir($this->home . '/src');
-        $years = glob('Year*', GLOB_ONLYDIR) ?: [];
+        $years = glob($this->yearPrefix . '*', GLOB_ONLYDIR) ?: [];
         rsort($years);
 
         return $years;
@@ -28,7 +38,7 @@ class GlobHelper
 
     public function getDays(int $year): array
     {
-        $dir = $this->home . '/src/Year' . $year;
+        $dir = $this->home . '/src/' . $this->yearPrefix . $year;
         if (is_dir($dir)) {
         chdir($dir);
         } else {
