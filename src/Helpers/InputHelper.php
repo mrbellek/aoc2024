@@ -9,7 +9,7 @@ use AdventOfCode\AbstractDay;
 class InputHelper
 {
     private Logger $logger;
-    private string $prefix;
+    private string $folderPrefix;
     private string $yearPrefix;
     private string $dayPrefix;
     private string $partPrefix;
@@ -22,10 +22,10 @@ class InputHelper
             'ec' => 'EC',
         };
         $this->dayPrefix = match($campaign) {
-            'aoc' => '',
+            'aoc' => 'Day',
             'ec' => 'Quest',
         };
-        $this->prefix = match($campaign) {
+        $this->folderPrefix = match($campaign) {
             'aoc' => '',
             'ec' => 'ec',
         };
@@ -43,10 +43,10 @@ class InputHelper
 
         switch ($dataSet) {
             case 'test':
-                $inputFile = sprintf('./data/%1$s%2$d/sample%3$02d%4$s.txt', $this->prefix, $year, $day, $partPrefix);
+                $inputFile = sprintf('./data/%1$s%2$d/sample%3$02d%4$s.txt', $this->folderPrefix, $year, $day, $partPrefix);
                 break;
             case 'live':
-                $inputFile = sprintf('./data/%1$s%2$d/input%3$02d%4$s.txt', $this->prefix, $year, $day, $partPrefix);
+                $inputFile = sprintf('./data/%1$s%2$d/input%3$02d%4$s.txt', $this->folderPrefix, $year, $day, $partPrefix);
                 break;
             default:
                 $this->logger->fatal(sprintf('Invalid environment "%s"', $dataSet));
