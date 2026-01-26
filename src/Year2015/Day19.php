@@ -27,6 +27,43 @@ class Day19 extends AbstractDay
         }
     }
 
+    public function part2(): void
+    {
+        //run the replacements in reverse, until we reach the starting molecule 'e'
+        $startMol = end($this->input);
+        $this->parseInput(array_slice($this->input, 0, -2));
+
+        //construct associative array of reverse replacements
+        $replaceReverse = [];
+        foreach ($this->replacements as $repl) {
+            $replaceReverse[$repl['to']] = $repl['from'];
+        }
+
+        //run reverse replacements until we reach 'e'
+        //note that $from/$to is switched here from part1
+        $currentMol = $startMol;
+        $i = 0;
+        while ($currentMol !== 'e') {
+            $nextMol = $currentMol;
+            foreach ($replaceReverse as $from => $to) {
+                $nextMol2 = str_replace($from, $to, $nextMol);
+                if ($nextMol !== $nextMol2) {
+                    $i++;
+                    $this->log($nextMol2);
+                    $nextMol = $nextMol2;
+                }
+            }
+            $currentMol = $nextMol;
+
+            if ($i % 100 === 0) {
+                echo '.';
+            }
+        }
+        echo PHP_EOL;
+        $this->log('done!');
+        var_dump($i);
+    }
+
     private function parseInput(array $input): void
     {
         foreach ($input as $line) {
